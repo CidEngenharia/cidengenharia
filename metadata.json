@@ -1,0 +1,7 @@
+{
+  "name": "CidEngenharia 360° - Sidney Sales",
+  "description": "Studio premium de engenharia visual, design estratégico e inovação digital liderado por Sidney Sales. Especialistas em cidengenharia360, IA generativa e interfaces de alta performance.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
