@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sidebar } from './components/Sidebar';
 import { Home } from './pages/Home';
@@ -10,7 +11,7 @@ import { Customers } from './pages/Customers';
 import { DigitalCard } from './pages/DigitalCard';
 import { DigitalCardOrder } from './pages/DigitalCardOrder';
 import { OnlineGenerators } from './pages/OnlineGenerators';
-import { ResumeGenerator } from './pages/ResumeGenerator';
+import { QRCodeGenerator } from './pages/QRCodeGenerator';
 import { CondoSmart } from './pages/CondoSmart';
 import { Services } from './pages/Services';
 import { Payment } from './pages/Payment';
@@ -58,6 +59,7 @@ const App: React.FC = () => {
     location.pathname === '/payment' ||
     location.pathname === '/admin' ||
     location.pathname === '/generators/resume' ||
+    location.pathname === '/generators/qrcode' ||
     location.pathname === '/condosmart' ||
     location.pathname.startsWith('/admin/');
 
@@ -68,7 +70,16 @@ const App: React.FC = () => {
       {showSidebar && <Sidebar />}
       
       <main className={`flex-1 transition-all duration-500 ${showSidebar ? 'ml-20' : 'w-full'}`}>
-        <div className="fixed top-6 right-8 z-[40]">
+        <div className="fixed top-6 right-8 z-[40] flex items-center gap-3">
+           {!location.pathname.startsWith('/admin') && (
+             <Link 
+               to="/admin" 
+               className="flex items-center gap-2 px-4 py-2 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-md border border-slate-200 dark:border-slate-700 rounded-full text-slate-600 dark:text-slate-300 hover:text-primary-500 dark:hover:text-primary-400 transition-all active:scale-95 group"
+             >
+               <span className="material-icons-outlined text-lg">lock</span>
+               <span className="text-[10px] font-black tracking-widest">Admin</span>
+             </Link>
+           )}
            <ThemeToggle isDark={isDark} toggle={() => setIsDark(!isDark)} />
         </div>
 
@@ -77,7 +88,7 @@ const App: React.FC = () => {
             <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
             <Route path="/services" element={<PageWrapper><Services /></PageWrapper>} />
             <Route path="/generators" element={<PageWrapper><OnlineGenerators /></PageWrapper>} />
-            <Route path="/generators/resume" element={<PageWrapper><ResumeGenerator /></PageWrapper>} />
+            <Route path="/generators/qrcode" element={<PageWrapper><QRCodeGenerator /></PageWrapper>} />
             <Route path="/condosmart" element={<PageWrapper><CondoSmart /></PageWrapper>} />
             <Route path="/quote" element={<PageWrapper><Quote /></PageWrapper>} />
             <Route path="/portfolio" element={<PageWrapper><Portfolio /></PageWrapper>} />
@@ -93,7 +104,7 @@ const App: React.FC = () => {
             <Route path="/admin/content-kit" element={<PageWrapper><AdminContentKit /></PageWrapper>} />
             <Route path="/admin/music-ai" element={<PageWrapper><AdminMusicAI /></PageWrapper>} />
             <Route path="/admin/prompt-analyzer" element={<PageWrapper><AdminPromptAnalyzer /></PageWrapper>} />
-            <Route path="/admin/audio-ai" element={<PageWrapper><AdminAudioAI /></PageWrapper>} />
+            <Route path="/admin/audio-ai" element={<PageWrapper><AdminAudioAI /></Route>} />
             <Route path="/admin/doc-analyzer" element={<PageWrapper><AdminDocAnalyzer /></PageWrapper>} />
             <Route path="/admin/smart-scanner" element={<PageWrapper><AdminSmartScanner /></PageWrapper>} />
             <Route path="/admin/pricing" element={<PageWrapper><AdminPricing /></PageWrapper>} />

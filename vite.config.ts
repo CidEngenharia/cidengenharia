@@ -4,15 +4,14 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false,
-    minify: 'esbuild',
+    minify: 'terser',
+    rollupOptions: {
+      // Removemos 'external' para permitir que o Vite gerencie o bundle corretamente
+    }
   },
-  server: {
-    port: 3000,
-    host: true
+  resolve: {
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json']
   }
 });
