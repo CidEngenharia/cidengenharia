@@ -11,10 +11,11 @@ interface ScanResult {
   snippet: string;
 }
 
+// Fix: Make uri and title optional to match @google/genai SDK internal types
 interface GroundingChunk {
   web?: {
-    uri: string;
-    title: string;
+    uri?: string;
+    title?: string;
   };
 }
 
@@ -106,7 +107,10 @@ export const AdminSmartScanner: React.FC = () => {
       setResults(data.files || []);
       
       const groundingChunks = res.candidates?.[0]?.groundingMetadata?.groundingChunks;
-      if (groundingChunks) setSources(groundingChunks);
+      if (groundingChunks) {
+        // Fix: Casting groundingChunks to any[] to avoid strict type collision with local interface
+        setSources(groundingChunks as any[]);
+      }
 
     } catch (err) {
       console.error(err);

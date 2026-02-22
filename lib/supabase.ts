@@ -24,10 +24,20 @@ if (!supabaseInstance || !supabaseInstance.auth) {
   const mockArrayResponse = { data: [], error: null };
 
   supabaseInstance = {
+    isMock: true,
     auth: {
       getUser: () => Promise.resolve({ data: { user: null }, error: null }),
       getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-      signInWithPassword: () => Promise.resolve(mockResponse),
+      signInWithPassword: ({ email, password }: any) => {
+        // Simulação de sucesso para o admin em modo mock
+        if (email === 'sidney.sales@gmail.com') {
+          return Promise.resolve({ 
+            data: { user: { email: 'sidney.sales@gmail.com', id: 'mock-id' } }, 
+            error: null 
+          });
+        }
+        return Promise.resolve({ data: null, error: { message: "Invalid login credentials" } });
+      },
       signInWithOAuth: () => Promise.resolve(mockResponse),
       signOut: () => Promise.resolve(mockResponse),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),

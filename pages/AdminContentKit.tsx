@@ -10,8 +10,9 @@ interface ExtractionResult {
   brand: { logoUrl: string; primary_colors: string[]; };
 }
 
+// Fix: Make uri and title optional to match @google/genai SDK internal types
 interface GroundingChunk {
-  web?: { uri: string; title: string; };
+  web?: { uri?: string; title?: string; };
 }
 
 export const AdminContentKit: React.FC = () => {
@@ -62,7 +63,10 @@ export const AdminContentKit: React.FC = () => {
       setResult(data);
       
       const groundingChunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
-      if (groundingChunks) setSources(groundingChunks);
+      if (groundingChunks) {
+        // Fix: Explicitly casting groundingChunks to any[] to satisfy the local interface expectation
+        setSources(groundingChunks as any[]);
+      }
     } catch (error) {
       console.error(error);
       alert("Falha na extração de dados técnicos.");

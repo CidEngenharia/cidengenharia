@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 
@@ -56,7 +57,7 @@ export const Quote: React.FC = () => {
 
     setIsGeneratingAI(true);
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
       const selectedLabels = servicesList
         .filter(s => formData.services.includes(s.id))
         .map(s => s.label)
@@ -120,7 +121,7 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 lg:py-16">
       <div className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-200 dark:border-slate-800">
-        
+
         {/* Lado Esquerdo - Info: Fundo bg-slate-900 (igual sidebar) no dia, bg-slate-950 na noite */}
         <div className="lg:w-5/12 bg-slate-900 dark:bg-slate-950 relative flex flex-col justify-between p-12 text-white engineering-grid overflow-hidden transition-colors duration-500">
           <div className="relative z-10">
@@ -151,36 +152,36 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8">
               <div className="group">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within:text-primary-500 transition-colors">Nome Completo</label>
-                <input 
+                <input
                   type="text" required value={formData.name}
-                  onChange={e => setFormData({...formData, name: e.target.value})}
+                  onChange={e => setFormData({ ...formData, name: e.target.value })}
                   className="w-full border-b-2 border-slate-100 dark:border-slate-800 bg-transparent py-3 focus:border-primary-500 outline-none transition-all text-slate-900 dark:text-white font-medium"
                   placeholder="Como devemos te chamar?"
                 />
               </div>
               <div className="group">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within:text-primary-500 transition-colors">E-mail Profissional</label>
-                <input 
+                <input
                   type="email" required value={formData.email}
-                  onChange={e => setFormData({...formData, email: e.target.value})}
+                  onChange={e => setFormData({ ...formData, email: e.target.value })}
                   className="w-full border-b-2 border-slate-100 dark:border-slate-800 bg-transparent py-3 focus:border-primary-500 outline-none transition-all text-slate-900 dark:text-white font-medium"
                   placeholder="seu@contato.com"
                 />
               </div>
               <div className="group">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within:text-primary-500 transition-colors">WhatsApp / Telefone</label>
-                <input 
+                <input
                   type="tel" required value={formData.phone}
-                  onChange={e => setFormData({...formData, phone: e.target.value})}
+                  onChange={e => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full border-b-2 border-slate-100 dark:border-slate-800 bg-transparent py-3 focus:border-primary-500 outline-none transition-all text-slate-900 dark:text-white font-medium"
                   placeholder="+55 (00) 00000-0000"
                 />
               </div>
               <div className="group">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 group-focus-within:text-primary-500 transition-colors">Empresa (Opcional)</label>
-                <input 
+                <input
                   type="text" value={formData.company}
-                  onChange={e => setFormData({...formData, company: e.target.value})}
+                  onChange={e => setFormData({ ...formData, company: e.target.value })}
                   className="w-full border-b-2 border-slate-100 dark:border-slate-800 bg-transparent py-3 focus:border-primary-500 outline-none transition-all text-slate-900 dark:text-white font-medium"
                   placeholder="Nome da sua marca ou empresa"
                 />
@@ -195,11 +196,10 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
                     key={service.id}
                     type="button"
                     onClick={() => handleServiceToggle(service.id)}
-                    className={`flex flex-col items-start p-4 rounded-2xl border text-left transition-all group ${
-                      formData.services.includes(service.id)
-                        ? 'bg-primary-500 border-primary-500 text-white shadow-lg shadow-primary-500/20'
-                        : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 hover:border-primary-500/50'
-                    }`}
+                    className={`flex flex-col items-start p-4 rounded-2xl border text-left transition-all group ${formData.services.includes(service.id)
+                      ? 'bg-primary-500 border-primary-500 text-white shadow-lg shadow-primary-500/20'
+                      : 'border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 hover:border-primary-500/50'
+                      }`}
                   >
                     <span className={`text-[11px] font-black uppercase mb-1 ${formData.services.includes(service.id) ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
                       {service.label}
@@ -214,18 +214,18 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
 
             <div className="space-y-4">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Fale-me sobre a ideia de seu Projeto</label>
-              <textarea 
+              <textarea
                 rows={5} required value={formData.message}
-                onChange={e => setFormData({...formData, message: e.target.value})}
+                onChange={e => setFormData({ ...formData, message: e.target.value })}
                 className="w-full rounded-[2rem] border-2 border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/50 text-slate-900 dark:text-white p-6 focus:border-primary-500 outline-none text-sm font-medium transition-all"
                 placeholder="Qual o seu desafio hoje? Seja detalhista..."
               ></textarea>
-              
+
               {/* Botões de Ação Abaixo do Textarea */}
               <div className="flex flex-wrap items-center gap-3">
                 <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-                
-                <button 
+
+                <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className="flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-slate-200 dark:border-slate-700"
@@ -234,15 +234,14 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
                   {formData.fileName ? formData.fileName : 'Anexar Referência'}
                 </button>
 
-                <button 
+                <button
                   type="button"
                   onClick={handleAIGenerate}
                   disabled={isGeneratingAI}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl ${
-                    isGeneratingAI 
-                      ? 'bg-purple-100 text-purple-400 cursor-not-allowed' 
-                      : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:scale-[1.02] active:scale-95'
-                  }`}
+                  className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl ${isGeneratingAI
+                    ? 'bg-purple-100 text-purple-400 cursor-not-allowed'
+                    : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:scale-[1.02] active:scale-95'
+                    }`}
                 >
                   {isGeneratingAI ? (
                     <span className="material-icons-outlined animate-spin text-lg">sync</span>
@@ -257,7 +256,7 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
               </p>
             </div>
 
-            <button 
+            <button
               type="submit"
               disabled={isSubmitting}
               className="w-full bg-primary-500 hover:bg-primary-600 text-white font-black py-5 rounded-[2rem] shadow-2xl shadow-primary-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-3 uppercase tracking-[0.2em] text-[11px]"

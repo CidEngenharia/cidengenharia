@@ -9,10 +9,11 @@ interface BrandKitData {
   logoUrl: string;
 }
 
+// Fix: Make uri and title optional to match @google/genai SDK internal types
 interface GroundingChunk {
   web?: {
-    uri: string;
-    title: string;
+    uri?: string;
+    title?: string;
   };
 }
 
@@ -98,7 +99,8 @@ export const AdminBrandKit: React.FC = () => {
 
       setResult(data);
       if (groundingChunks) {
-        setSources(groundingChunks);
+        // Fix: Casting groundingChunks to any or ensuring compatibility with local interface
+        setSources(groundingChunks as any[]);
       }
     } catch (error: any) {
       console.error("Erro na análise Brand Kit:", error);

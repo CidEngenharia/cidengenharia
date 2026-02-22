@@ -13,15 +13,19 @@ export const AdminLogin: React.FC = () => {
 
   // E-mail autorizado do Administrador
   const ADMIN_EMAIL = 'sidney.sales@gmail.com';
+  // Chave de Segurança de Emergência (Master Key)
+  const MASTER_PASSWORD = 'Cid360@Admin';
 
   useEffect(() => {
     const checkUser = async () => {
-      // Verifica se já existe uma sessão ativa
-      const { data: { user } } = await supabase.auth.getUser();
       const hasLocalSession = localStorage.getItem('admin_session') === 'true';
-      
-      if ((user && user.email === ADMIN_EMAIL) || hasLocalSession) {
-        // Garante que ambos estejam sincronizados
+      if (hasLocalSession) {
+        navigate('/admin/dashboard');
+        return;
+      }
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && user.email === ADMIN_EMAIL) {
         localStorage.setItem('admin_session', 'true');
         navigate('/admin/dashboard');
       }
@@ -34,35 +38,43 @@ export const AdminLogin: React.FC = () => {
     setIsLoading(true);
     setError(null);
 
+    // Normalização
+    const inputEmail = email.trim().toLowerCase();
+
     try {
+      // 1. Tenta Autenticação via Supabase
       const { data, error: authError } = await supabase.auth.signInWithPassword({
-        email,
+        email: inputEmail,
         password,
       });
 
+      // 2. Lógica de Bypass / Master Key
+      // Se o Supabase falhar mas as credenciais baterem com a Master Key local
+      if ((authError || !data.user) && inputEmail === ADMIN_EMAIL && password === MASTER_PASSWORD) {
+        console.info("Acesso via Chave Mestra concedido.");
+        localStorage.setItem('admin_session', 'true');
+        navigate('/admin/dashboard');
+        return;
+      }
+
       if (authError) {
-        // Se for um erro de credenciais, mas o e-mail for o do Sidney, 
-        // damos um feedback mais técnico ou permitimos revisão.
-        if (authError.message === "Invalid login credentials" && email === ADMIN_EMAIL) {
-          throw new Error("Chave de Segurança incorreta para este administrador.");
-        }
         throw authError;
       }
 
-      // Verificação de segurança adicional
+      // 3. Verificação de e-mail restrito
       if (data && data.user && data.user.email !== ADMIN_EMAIL) {
         await supabase.auth.signOut();
         throw new Error("Acesso restrito ao administrador Sidney Sales.");
       }
 
-      // Login bem sucedido: Salva flag de compatibilidade para subpáginas
+      // Login bem sucedido
       localStorage.setItem('admin_session', 'true');
       navigate('/admin/dashboard');
     } catch (err: any) {
       setError({
         title: "Falha na Autenticação",
         detail: err.message === "Invalid login credentials" 
-          ? "E-mail ou Chave de Segurança incorretos." 
+          ? "E-mail ou Chave de Segurança incorretos. Use sua Chave Mestra se necessário." 
           : err.message
       });
     } finally {
@@ -94,7 +106,6 @@ export const AdminLogin: React.FC = () => {
         throw authError;
       }
       
-      // Se não deu erro, a flag de sessão será setada pelo useEffect do Dashboard ao carregar
       localStorage.setItem('admin_session', 'true');
     } catch (err: any) {
       setError({
@@ -170,7 +181,7 @@ export const AdminLogin: React.FC = () => {
                 required 
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="sidney.sales@gmail.com"
+                placeholder="Ex: admin@dominio.com"
                 className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 rounded-2xl focus:ring-2 focus:ring-primary-500 outline-none dark:text-white transition-all text-sm font-medium"
               />
             </div>
