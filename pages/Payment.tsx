@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// Force redeploy - 2026-02-23
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
