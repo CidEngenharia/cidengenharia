@@ -130,12 +130,32 @@ export const DigitalCardOrder: React.FC = () => {
     setFormData({ ...formData, links: newLinks });
   };
 
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = async () => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const orderId = 'ord_' + Math.random().toString(36).substr(2, 9);
+
+      const { supabase } = await import('../lib/supabase');
+      const { error } = await supabase
+        .from('card_orders')
+        .insert([{
+          id: orderId,
+          product_type: productType,
+          name: formData.name,
+          pet_name: formData.petName,
+          profession: formData.profession,
+          whatsapp: formData.whatsapp,
+          total_value: currentProductPrice + (formData.deliveryType === 'shipping' ? shippingFee : 0),
+          status: 'pending'
+        }]);
+
+      navigate(`/payment?type=${productType}&order_id=${orderId}`);
+    } catch (e) {
+      console.error(e);
       navigate(`/payment?type=${productType}`);
-    }, 2000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const renderProgress = () => {

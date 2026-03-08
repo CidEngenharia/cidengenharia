@@ -50,6 +50,8 @@ export const Payment: React.FC = () => {
       'generator_download': {
         label: 'Download de Documento IA',
         val: 9.99,
+        // TODO: PLEASE REPLACE THIS WITH THE ACTUAL STRIPE BUY BUTTON ID FOR 9.99.
+        // It's currently using the 19.99 Digital DyCard button ID.
         buyButtonId: 'buy_btn_1T3hEC3FKB6XMKTEYXxxbH8k',
         qrCode: '/stripe_qr_code_19.png'
       }
@@ -164,6 +166,7 @@ export const Payment: React.FC = () => {
                     key={order.buyButtonId}
                     buy-button-id={order.buyButtonId}
                     publishable-key="pk_live_51T17SS3FKB6XMKTEBZSjXN61qXREmQA7KOyZe6vtEeFgTClqhpV5zgOZ66NiFA7o3WpJ3Kl8PBVYVjWLN7gfvCRT00rtaMcEow"
+                    client-reference-id={new URLSearchParams(location.search).get('order_id') || undefined}
                   >
                     {/* @ts-ignore */}
                   </stripe-buy-button>

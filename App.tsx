@@ -43,6 +43,7 @@ const PageWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 const App: React.FC = () => {
   const [isDark, setIsDark] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -66,9 +67,16 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-[#020617] transition-colors duration-300">
-      {showSidebar && <Sidebar />}
+      {showSidebar && (
+        <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+      )}
 
-      <main className={`flex-1 transition-all duration-500 ${showSidebar ? 'ml-20' : 'w-full'}`}>
+      <main
+        className={`flex-1 transition-all duration-500 ${showSidebar
+          ? (isSidebarOpen ? 'ml-64' : 'ml-20')
+          : 'w-full'
+          }`}
+      >
         <div className="fixed top-6 right-8 z-[40] flex items-center gap-3">
           {!isAdminPage && (
             <Link
