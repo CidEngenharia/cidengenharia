@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useLang } from '../lib/LangContext';
 
 
-const ProjectCard = ({ image, title, type, desc, status, statusLabel, link }: { image: string, title: string, type: string, desc: string, status: number, statusLabel: string, link: string }) => (
+const ProjectCard = ({ image, title, type, desc, techs, status, statusLabel, link }: { image: string, title: string, type: string, desc: string, techs: string, status: number, statusLabel: string, link: string }) => (
   <motion.div 
     initial={{ opacity: 0, scale: 0.95 }}
     whileInView={{ opacity: 1, scale: 1 }}
@@ -39,6 +39,10 @@ const ProjectCard = ({ image, title, type, desc, status, statusLabel, link }: { 
         <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed">
           {desc}
         </p>
+
+        <p className="text-[#eab308] dark:text-[#eab308]/60 text-[9px] font-bold uppercase tracking-[0.15em] opacity-80 pt-1">
+          {techs}
+        </p>
       </div>
       
       <div className="space-y-3">
@@ -72,14 +76,25 @@ export const Portfolio: React.FC = () => {
       title: 'AICondo360',
       type: 'Software SaaS',
       desc: 'Inteligência que Transforma Condomínios em Família. A plataforma definitiva para gestão condominial moderna, automatizando tarefas e aumentando a segurança.',
+      techs: 'Vite, React, TypeScript, Supabase, Stripe, Framer Motion, Vercel',
       status: 100,
       statusLabel: 'Concluído',
       link: 'https://ai-condo360.vercel.app/'
     },
     {
+      title: 'CidEngenharia',
+      type: 'Engenharia de Software & IA',
+      desc: 'Sua Fábrica de Soluções Digitais Premium. Um ecossistema completo de engenharia web focado em sistemas inteligentes, design de alto impacto e automação de processos.',
+      techs: 'Vite, React, TypeScript, Tailwind CSS, Framer Motion, Gemini AI, Vercel',
+      status: 100,
+      statusLabel: 'Concluído',
+      link: 'https://cidengenharia.vercel.app/'
+    },
+    {
       title: 'PetLocal',
       type: 'Ecossistema Digital',
       desc: 'O Hub de Serviços do seu amiguinho. Registro completo (RG + Certidão + Carteira de Vacina) com tecnologia QR Code vinculada ao perfil digital.',
+      techs: 'Vite, React, TypeScript, Tailwind CSS, QR Code Generator, Vercel',
       status: 100,
       statusLabel: 'Concluído',
       link: 'https://petlocal-animal.vercel.app/'
@@ -88,6 +103,7 @@ export const Portfolio: React.FC = () => {
       title: 'EscolarGO',
       type: 'Web System / App',
       desc: 'Segurança e Tranquilidade em cada Trajeto. Monitoramento de rotas e comunicação direta entre pais e motoristas com tecnologia de ponta.',
+      techs: 'Vite, React, TypeScript, Tailwind CSS, Google Maps API, Vercel',
       status: 70,
       statusLabel: 'Em Andamento',
       link: 'https://escolargo.vercel.app/'
@@ -97,6 +113,7 @@ export const Portfolio: React.FC = () => {
   // Actual images from public folder
   const actualProjectImages = [
     '/Aicondo360.png',
+    '/CidEngenharia.png',
     '/PetLocal.png',
     '/EscolarGO.png'
   ];

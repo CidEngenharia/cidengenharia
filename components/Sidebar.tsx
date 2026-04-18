@@ -34,7 +34,8 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   return (
-    <aside className={`fixed left-0 top-0 h-screen z-50 bg-white/30 dark:bg-[#06070a]/60 backdrop-blur-3xl border-r border-slate-200/30 dark:border-white/5 transition-all duration-500 flex flex-col overflow-hidden shadow-2xl ${isOpen ? 'w-64' : 'w-20'
+    <aside className={`fixed left-0 top-0 h-screen z-50 bg-white dark:bg-[#06070a]/60 backdrop-blur-3xl border-r border-slate-200 dark:border-white/5 transition-all duration-500 flex flex-col overflow-hidden shadow-2xl ${
+      isOpen ? 'w-64 translate-x-0' : 'w-0 md:w-20 -translate-x-full md:translate-x-0 opacity-0 md:opacity-100'
       }`}>
       {/* Header: hamburger + "Menu" label */}
       <div className="h-20 flex items-center px-4 mt-2">
@@ -70,9 +71,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         <NavItem to="/generators" icon="auto_stories" label="Geradores" isOpen={isOpen} />
         <NavItem to="/quote" icon="request_quote" label="Orçamento" isOpen={isOpen} />
         <NavItem to="/digital-card" icon="qr_code_2" label="Cartão" isOpen={isOpen} />
-        <NavItem to="/portfolio" icon="layers" label="Portfólio" isOpen={isOpen} />
+        <NavItem to="/portfolio" icon="code" label="Portfólio" isOpen={isOpen} />
         <NavItem to="/customers" icon="groups" label="Clientes" isOpen={isOpen} />
-        <NavItem to="/shop" icon="apps" label="Apps" isOpen={isOpen} />
+        <NavItem to="/shop" icon="grid_view" label="Apps" isOpen={isOpen} />
       </nav>
 
       <div className="p-4 border-t border-slate-200/30 dark:border-white/5 opacity-40">

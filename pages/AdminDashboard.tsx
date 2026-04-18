@@ -13,14 +13,19 @@ export const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      // Check localStorage first for immediate state if possible
       const hasLocalSession = localStorage.getItem('admin_session') === 'true';
+      if (hasLocalSession) {
+        setIsAdmin(true);
+        fetchQuickStats();
+      }
 
-      if ((user && user.email === ADMIN_EMAIL) || hasLocalSession) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && user.email === ADMIN_EMAIL) {
         setIsAdmin(true);
         localStorage.setItem('admin_session', 'true');
-        fetchQuickStats();
-      } else {
+        if (!hasLocalSession) fetchQuickStats();
+      } else if (!hasLocalSession) {
         navigate('/admin');
       }
     };

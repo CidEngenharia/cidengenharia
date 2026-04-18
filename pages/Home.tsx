@@ -82,7 +82,7 @@ const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) =
   }, [text, delay]);
   
   return (
-    <span className="text-white">
+    <span className="text-slate-700 dark:text-white transition-colors duration-500">
       {displayText}
       <motion.span
         animate={{ opacity: [0, 1, 0] }}
@@ -125,7 +125,7 @@ const Stats = () => {
             <span className={`text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br ${stat.gradient} tracking-tighter drop-shadow-sm`}>
               {stat.number}
             </span>
-            <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-wider leading-tight max-w-[200px] opacity-80">
+            <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider leading-tight max-w-[200px] opacity-80">
               {stat.text}
             </p>
           </motion.div>
@@ -163,10 +163,10 @@ const DraftForm = () => {
   return (
     <section className="py-24 px-6 md:px-24 max-w-4xl mx-auto relative z-10">
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-5xl font-black text-[#fbbf24] uppercase tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+        <h2 className="text-4xl md:text-5xl font-black text-slate-800 dark:text-[#fbbf24] uppercase tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] transition-colors duration-500">
           Vamos fazer um rascunho?
         </h2>
-        <div className="w-24 h-1 bg-[#fbbf24] mx-auto rounded-full opacity-50"></div>
+        <div className="w-24 h-1 bg-slate-400 dark:bg-[#fbbf24] mx-auto rounded-full opacity-50 transition-colors duration-500"></div>
       </div>
 
       <AnimatePresence mode="wait">
@@ -184,7 +184,7 @@ const DraftForm = () => {
                 required
                 type="text" 
                 placeholder="Seu nome completo"
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 value={formData.name}
                 onChange={e => setFormData({...formData, name: e.target.value})}
               />
@@ -195,7 +195,7 @@ const DraftForm = () => {
                 required
                 type="tel" 
                 placeholder="(00) 00000-0000"
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 value={formData.whatsapp}
                 onChange={e => setFormData({...formData, whatsapp: e.target.value})}
               />
@@ -206,7 +206,7 @@ const DraftForm = () => {
                 required
                 type="text" 
                 placeholder="Ex: App de Delivery"
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 value={formData.projectName}
                 onChange={e => setFormData({...formData, projectName: e.target.value})}
               />
@@ -217,7 +217,7 @@ const DraftForm = () => {
                 required
                 type="text" 
                 placeholder="Seu orçamento estimado"
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 value={formData.budget}
                 onChange={e => setFormData({...formData, budget: e.target.value})}
               />
@@ -227,7 +227,7 @@ const DraftForm = () => {
               <input 
                 type="text" 
                 placeholder="Cores, referências, estilo..."
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600"
                 value={formData.layoutIdeas}
                 onChange={e => setFormData({...formData, layoutIdeas: e.target.value})}
               />
@@ -238,7 +238,7 @@ const DraftForm = () => {
                 required
                 rows={4}
                 placeholder="Conte-nos um pouco mais sobre sua ideia..."
-                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600 resize-none"
+                className="w-full bg-slate-100 dark:bg-slate-900/50 border border-slate-200 dark:border-white/5 rounded-2xl px-6 py-4 text-slate-900 dark:text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 resize-none"
                 value={formData.details}
                 onChange={e => setFormData({...formData, details: e.target.value})}
               />
@@ -294,22 +294,38 @@ export const Home: React.FC = () => {
     { size: 'w-[28%] h-[28%]', pos: 'top-[15%] left-[35%]', color: 'rgba(30,58,138,0.4)', delay: 6, duration: 20 },
   ];
 
-  const carouselItems = t.carouselTitles.map((title, i) => ({
-    url: [
-      '/carousel_networking.jpg',
-      '/carousel_identity.png',
-      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
-      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
-    ][i],
-    title,
-    description: t.carouselDescs[i],
-    category: t.carouselCategories[i],
-  }));
+  const carouselItems = [
+    ...t.carouselTitles.map((title, i) => ({
+      url: [
+        '/carousel_networking.jpg',
+        '/carousel_identity.png',
+        'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
+        'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
+        '/branding.png'
+      ][i],
+      title,
+      description: t.carouselDescs[i],
+      category: t.carouselCategories[i],
+      type: 'image'
+    })),
+    {
+      url: '/assistente_ia_.mp4',
+      title: 'Automação de processos',
+      description: 'Integração de assistentes inteligentes para otimização de fluxos e atendimento em alta performance.',
+      category: 'INTELIGÊNCIA ARTIFICIAL',
+      type: 'video'
+    }
+  ];
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % carouselItems.length), 6000);
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+    }, 7000); // Slightly longer for better reading
     return () => clearInterval(timer);
   }, [carouselItems.length]);
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
 
   return (
     <div className="relative overflow-hidden min-h-screen bg-slate-50 dark:bg-[#080a12] transition-colors duration-500 font-body">
@@ -360,14 +376,12 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-col xl:flex-row items-center xl:items-center gap-x-4 mb-4 text-center xl:text-left"
+          className="flex flex-col xl:flex-row items-center xl:items-baseline gap-x-2 mb-4 text-center xl:text-left"
         >
-          <div className="flex items-center gap-4">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1]">
-              {t.brand}
-            </h2>
-          </div>
-          <div className="text-3xl sm:text-4xl md:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
+            {t.brand}
+          </h2>
+          <div className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
              <TypewriterText text=", e ai vamos codar?" delay={1} />
           </div>
         </motion.div>
@@ -391,7 +405,7 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-semibold leading-relaxed mb-10"
+          className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-bold leading-relaxed mb-10"
         >
           {t.heroDesc}
         </motion.p>
@@ -411,7 +425,7 @@ export const Home: React.FC = () => {
           </Link>
           <Link
             to="/portfolio"
-            className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black rounded-xl transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px] backdrop-blur-sm"
+            className="px-8 py-4 bg-slate-200/50 dark:bg-white/5 hover:bg-slate-200/80 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-black rounded-xl transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px] backdrop-blur-sm"
           >
             {t.ctaPortfolio}
           </Link>
@@ -424,38 +438,65 @@ export const Home: React.FC = () => {
         <Stats />
 
         <div className="relative w-full aspect-[16/9] md:aspect-[21/9] max-h-[600px] rounded-[2rem] overflow-hidden shadow-2xl group border border-white/5">
-          <AnimatePresence mode='wait'>
+          <AnimatePresence mode='wait' initial={false}>
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, x: 50, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, x: -50, filter: 'blur(10px)' }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0 w-full h-full"
             >
-              <img src={carouselItems[currentSlide].url} className="w-full h-full object-cover" alt={carouselItems[currentSlide].title} />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+              {carouselItems[currentSlide].type === 'video' ? (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover transition-transform duration-[10s] ease-linear scale-105 group-hover:scale-110"
+                >
+                  <source src={carouselItems[currentSlide].url} type="video/mp4" />
+                </video>
+              ) : (
+                <img src={carouselItems[currentSlide].url} className="w-full h-full object-cover transition-transform duration-[10s] ease-linear scale-105 group-hover:scale-110" alt={carouselItems[currentSlide].title} />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent"></div>
 
               <div className="absolute bottom-12 left-12 right-12 text-left">
                 <span className="text-[10px] font-black bg-violet-600 text-white px-4 py-1.5 rounded-full tracking-widest mb-4 inline-block uppercase">
                   {carouselItems[currentSlide].category}
                 </span>
-                <h2 className="text-3xl md:text-5xl font-black text-white uppercase font-display tracking-tight mb-2">
+                <h2 className="text-2xl md:text-4xl font-black text-white uppercase font-display tracking-tight mb-2 drop-shadow-lg">
                   {carouselItems[currentSlide].title}
                 </h2>
-                <p className="text-slate-300 text-sm md:text-lg max-w-xl font-medium">
+                <p className="text-white/80 text-xs md:text-base max-w-xl font-normal drop-shadow-md">
                   {carouselItems[currentSlide].description}
                 </p>
               </div>
             </motion.div>
           </AnimatePresence>
 
-          <div className="absolute bottom-12 right-12 flex gap-2">
+          <div className="absolute bottom-12 left-12 right-12 flex items-center justify-between z-20 pointer-events-none">
+            <button 
+              onClick={prevSlide}
+              className="flex items-center justify-center text-[#fbbf24] transition-all pointer-events-auto active:scale-95 opacity-0 md:opacity-100 group-hover:scale-125"
+            >
+              <span className="material-icons-outlined text-4xl">chevron_left</span>
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="flex items-center justify-center text-[#fbbf24] transition-all pointer-events-auto active:scale-95 opacity-0 md:opacity-100 group-hover:scale-125"
+            >
+              <span className="material-icons-outlined text-4xl">chevron_right</span>
+            </button>
+          </div>
+
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2 z-20">
             {carouselItems.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentSlide(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${currentSlide === i ? 'w-8 bg-violet-500' : 'w-2 bg-white/40'}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${currentSlide === i ? 'w-8 bg-[#fbbf24]' : 'w-2 bg-white/40'}`}
               ></button>
             ))}
           </div>
