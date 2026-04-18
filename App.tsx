@@ -111,9 +111,17 @@ const App: React.FC = () => {
   return (
     <LangContext.Provider value={{ lang, t: translations[lang] }}>
     <div className="flex min-h-screen bg-slate-50 dark:bg-[#06070a] transition-colors duration-300">
-      {/* Sidebar - Positioned fixed but logically separate */}
       {showSidebar && (
-        <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+        <>
+          {/* Mobile Overlay */}
+          {isSidebarOpen && (
+            <div 
+              className="md:hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[45]" 
+              onClick={() => setIsSidebarOpen(false)}
+            />
+          )}
+          <Sidebar isOpen={isSidebarOpen} onToggle={() => setIsSidebarOpen(!isSidebarOpen)} />
+        </>
       )}
 
       <main
@@ -126,7 +134,18 @@ const App: React.FC = () => {
         {!isAdminPage && (
           <div className="sticky top-5 z-[40] w-full pointer-events-none mb-[-60px]">
             <div className="max-w-7xl mx-auto px-6 md:px-24 flex items-center justify-between">
-              <div className="pointer-events-auto">
+              <div className="pointer-events-auto flex items-center gap-3">
+                {/* Mobile Menu Toggle */}
+                <button
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="md:hidden flex items-center justify-center w-10 h-10 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md shadow-md border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 transition-all active:scale-95"
+                >
+                  <svg className="w-5 h-5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round">
+                    <line x1="3" y1="6"  x2="21" y2="6"  />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                  </svg>
+                </button>
                 <Link to="/" className="flex items-center gap-3 group">
                   <div className="relative">
                     <div className="absolute -inset-2 bg-gradient-to-r from-violet-600/10 to-indigo-600/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -137,7 +156,7 @@ const App: React.FC = () => {
                     />
                   </div>
                   <div className="flex items-center">
-                    <span className="text-[12px] font-bold text-violet-400 leading-none">CidEngenharia Dev</span>
+                    <span className="text-[12px] font-bold text-violet-400 leading-none hidden sm:block">CidEngenharia Dev</span>
                   </div>
                 </Link>
               </div>
