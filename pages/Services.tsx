@@ -137,7 +137,7 @@ const servicesData: ServiceDetail[] = [
     price: 'Sob Consulta',
     icon: 'construction',
     desc: 'Modificação técnica e visual de peças industriais ou artísticas.',
-    features: ['Engenharia Visual', 'Modelagem 3D', 'Pintura especial', 'Prototipagem'],
+    features: ['Engenharia 360°', 'Modelagem 3D', 'Pintura especial', 'Prototipagem'],
     fullDesc: 'Serviço especializado em alterar a estética e funcionalidade de peças. Utilizamos engenharia reversa e design industrial para criar customizações únicas em hardware, veículos ou mobiliário.',
     color: 'bg-slate-700'
   },
@@ -391,7 +391,7 @@ export const Services: React.FC = () => {
         </div>
         <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter uppercase font-display leading-none">
           Soluções em <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-emerald-400 italic">Engenharia Visual</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-emerald-400 italic">Engenharia 360°</span>
         </h1>
         <div className="max-w-3xl mx-auto space-y-12">
           <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">

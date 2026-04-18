@@ -1,0 +1,55 @@
+export type Lang = 'PT' | 'EN' | 'ES';
+
+export const translations = {
+  PT: {
+    badge: 'Plataforma completa de engenharia e IA',
+    brand: 'CidEngenharia',
+    heroTitle: 'Fábrica Dev',
+    heroDesc: 'Utilizando o ouro da IA para transformar seu negócio em soluções digitais premium — identidade visual, sistemas inteligentes e engenharia de ponta.',
+    ctaSolutions: 'Nossas Soluções',
+    ctaPortfolio: 'Ver Portfólio',
+    socialLabel: 'Nossas Redes Sociais',
+    carouselCategories: ['INOVAÇÃO', 'DESIGN', 'TECNOLOGIA', 'PRODUÇÃO'],
+    carouselTitles: ['Networking Inteligente', 'Identidade Visual & IA', 'Engenharia de Dados', 'Studio de Criação'],
+    carouselDescs: [
+      'Ecossistema DyCard: Cartão Digital, NFC e QR Code. Segurança e conexão instantânea para o seu networking profissional.',
+      'Transformação de branding utilizando engenharia 360° aplicada e inteligência artificial generativa de última geração.',
+      'Visualização complexa e dashboards estratégicos para tomada de decisão baseada em métricas de alta fidelidade.',
+      'Espaço físico e digital dedicado à manufatura técnica de peças em fibra, metal e soluções em comunicação visual premium.',
+    ],
+  },
+  EN: {
+    badge: 'Complete engineering and AI platform',
+    brand: 'CidEngineering',
+    heroTitle: 'Dev Factory',
+    heroDesc: 'Using the gold of AI to transform your business into premium digital solutions — visual identity, intelligent systems and cutting-edge engineering.',
+    ctaSolutions: 'Our Solutions',
+    ctaPortfolio: 'View Portfolio',
+    socialLabel: 'Our Social Media',
+    carouselCategories: ['INNOVATION', 'DESIGN', 'TECHNOLOGY', 'PRODUCTION'],
+    carouselTitles: ['Smart Networking', 'Visual Identity & AI', 'Data Engineering', 'Creation Studio'],
+    carouselDescs: [
+      'DyCard Ecosystem: Digital Card, NFC and QR Code. Security and instant connection for your professional networking.',
+      'Brand transformation using applied engineering 360° and state-of-the-art generative artificial intelligence.',
+      'Complex visualization and strategic dashboards for data-driven decision making at high fidelity.',
+      'Physical and digital space dedicated to technical manufacturing of fiber, metal parts and premium visual communication solutions.',
+    ],
+  },
+  ES: {
+    badge: 'Plataforma completa de ingeniería e IA',
+    brand: 'CidIngeniería',
+    heroTitle: 'Fábrica Dev',
+    heroDesc: 'Usando el oro de la IA para transformar tu negocio en soluciones digitales premium — identidad visual, sistemas inteligentes e ingeniería de vanguardia.',
+    ctaSolutions: 'Nuestras Soluciones',
+    ctaPortfolio: 'Ver Portafolio',
+    socialLabel: 'Nuestras Redes Sociales',
+    carouselCategories: ['INNOVACIÓN', 'DISEÑO', 'TECNOLOGÍA', 'PRODUCCIÓN'],
+    carouselTitles: ['Networking Inteligente', 'Identidad Visual & IA', 'Ingeniería de Datos', 'Estudio de Creación'],
+    carouselDescs: [
+      'Ecosistema DyCard: Tarjeta Digital, NFC y QR Code. Seguridad y conexión instantánea para tu networking profesional.',
+      'Transformación de branding usando ingeniería 360° aplicada e inteligencia artificial generativa de última generación.',
+      'Visualización compleja y dashboards estratégicos para la toma de decisiones basada en métricas de alta fidelidad.',
+      'Espacio físico y digital dedicado a la manufactura técnica de piezas en fibra, metal y soluciones en comunicación visual premium.',
+    ],
+  },
+} as const;

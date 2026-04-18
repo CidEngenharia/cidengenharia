@@ -1,165 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { useLang } from '../lib/LangContext';
 
-const Icon360 = () => (
-  <div className="relative inline-flex items-center justify-center">
-    <svg viewBox="0 0 100 100" className="w-20 h-20 md:w-28 md:h-28 drop-shadow-xl" fill="none">
-      <defs>
-        <linearGradient id="portfolioGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10b981" />
-          <stop offset="50%" stopColor="#3b82f6" />
-          <stop offset="100%" stopColor="#34d399" />
-        </linearGradient>
-      </defs>
-      <circle cx="50" cy="50" r="45" stroke="url(#portfolioGradient)" strokeWidth="0.5" strokeDasharray="5 5" opacity="0.3" />
-      <text x="50" y="55" textAnchor="middle" className="font-black" fontSize="24" style={{ fill: 'url(#portfolioGradient)', fontFamily: 'Space Grotesk' }}>360</text>
-    </svg>
-  </div>
+
+const ProjectCard = ({ image, title, type, desc, status, statusLabel, link }: { image: string, title: string, type: string, desc: string, status: number, statusLabel: string, link: string }) => (
+  <motion.div 
+    initial={{ opacity: 0, scale: 0.95 }}
+    whileInView={{ opacity: 1, scale: 1 }}
+    viewport={{ once: true }}
+    className="bg-white dark:bg-[#06070a]/60 backdrop-blur-3xl rounded-[2.5rem] overflow-hidden border border-slate-200/50 dark:border-white/10 shadow-xl group flex flex-col md:flex-row"
+  >
+    <a 
+      href={link} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="relative w-full md:w-2/5 h-64 md:h-auto overflow-hidden block cursor-pointer"
+    >
+      <img src={image} alt={title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40">
+        <span className="material-icons-outlined text-white text-4xl">open_in_new</span>
+      </div>
+    </a>
+    
+    <div className="flex-1 p-8 md:p-10 flex flex-col justify-between space-y-6">
+      <div className="space-y-4">
+        <div className="flex items-center gap-3">
+          <span className="bg-primary-500/10 text-primary-500 text-[9px] font-black px-3 py-1 rounded-lg uppercase tracking-[0.2em] border border-primary-500/20">
+            {type}
+          </span>
+          <div className="h-px flex-1 bg-slate-200 dark:bg-white/5"></div>
+        </div>
+        
+        <h3 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase tracking-tight">
+          {title}
+        </h3>
+        
+        <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base leading-relaxed">
+          {desc}
+        </p>
+      </div>
+      
+      <div className="space-y-3">
+        <div className="flex justify-between items-end">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">Estado do Projeto:</span>
+            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${statusLabel === 'Concluído' ? 'bg-green-500/10 text-green-500' : 'bg-amber-500/10 text-amber-500'}`}>
+              {statusLabel}
+            </span>
+          </div>
+          <span className="text-xs font-black text-slate-900 dark:text-white tracking-tighter">{status}%</span>
+        </div>
+        <div className="h-3 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden p-[1px]">
+          <motion.div 
+            initial={{ width: 0 }}
+            whileInView={{ width: `${status}%` }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+            className="h-full rounded-full bg-gradient-to-r from-[#ef4444] via-[#eab308] to-[#22c55e]"
+          />
+        </div>
+      </div>
+    </div>
+  </motion.div>
 );
 
 export const Portfolio: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLang();
 
-  const portfolioSlides = [
+  const projects = [
     {
-      url: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80&w=1200',
-      title: 'Ecossistema DyCard NFC',
-      category: 'ENGENHARIA VISUAL',
-      desc: 'Integração de hardware NFC com interfaces digitais de alta fidelidade.'
+      title: 'AICondo360',
+      type: 'Software SaaS',
+      desc: 'Inteligência que Transforma Condomínios em Família. A plataforma definitiva para gestão condominial moderna, automatizando tarefas e aumentando a segurança.',
+      status: 100,
+      statusLabel: 'Concluído',
+      link: 'https://ai-condo360.vercel.app/'
     },
     {
-      url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=1200',
-      title: 'Branding Estratégico IA',
-      category: 'DESIGN & TECH',
-      desc: 'Desenvolvimento de identidade visual utilizando processamento neural.'
+      title: 'PetLocal',
+      type: 'Ecossistema Digital',
+      desc: 'O Hub de Serviços do seu amiguinho. Registro completo (RG + Certidão + Carteira de Vacina) com tecnologia QR Code vinculada ao perfil digital.',
+      status: 100,
+      statusLabel: 'Concluído',
+      link: 'https://petlocal-animal.vercel.app/'
     },
     {
-      url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
-      title: 'Dashboards Industriais',
-      category: 'VISUALIZAÇÃO DE DADOS',
-      desc: 'Sistemas complexos de monitoramento com foco em UX/UI técnico.'
+      title: 'EscolarGO',
+      type: 'Web System / App',
+      desc: 'Segurança e Tranquilidade em cada Trajeto. Monitoramento de rotas e comunicação direta entre pais e motoristas com tecnologia de ponta.',
+      status: 70,
+      statusLabel: 'Em Andamento',
+      link: 'https://escolargo.vercel.app/'
     }
   ];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % portfolioSlides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [portfolioSlides.length]);
+  // Actual images from public folder
+  const actualProjectImages = [
+    '/Aicondo360.png',
+    '/PetLocal.png',
+    '/EscolarGO.png'
+  ];
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] pb-32 transition-colors duration-500 font-body">
       {/* Header Section */}
-      <header className="max-w-6xl mx-auto px-8 pt-16 pb-10 flex flex-col items-center text-center space-y-4">
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <Icon360 />
-        </motion.div>
-        <div className="space-y-1">
+      <header className="max-w-6xl mx-auto px-8 pt-24 pb-16 flex flex-col items-center text-center space-y-4">
+        <div className="space-y-4">
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tight leading-none">
-            Portfólio <span className="text-primary-500 italic">CidEngenharia</span>
+            Portfólio de <span className="text-primary-500 italic">Sistemas Web</span>
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs max-w-2xl mx-auto font-black uppercase tracking-[0.4em]">
-            Engenharia visual e soluções inteligentes
+            Engenharia de precisão e interfaces de alto impacto
           </p>
         </div>
       </header>
 
-      {/* Main Project Carousel */}
-      <section className="max-w-6xl mx-auto px-6 mb-20">
-        <div className="relative h-[350px] md:h-[550px] rounded-[2.5rem] overflow-hidden shadow-2xl group border border-slate-200 dark:border-white/5">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.6 }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <img 
-                src={portfolioSlides[currentSlide].url} 
-                className="w-full h-full object-cover" 
-                alt={portfolioSlides[currentSlide].title} 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent"></div>
-              
-              <div className="absolute bottom-10 left-8 md:left-12 right-8 text-left">
-                <span className="text-[9px] font-black bg-primary-500 text-white px-3 py-1 rounded-full tracking-widest mb-3 inline-block uppercase">
-                  {portfolioSlides[currentSlide].category}
-                </span>
-                <h2 className="text-2xl md:text-4xl font-black text-white uppercase font-display tracking-tight mb-2">
-                  {portfolioSlides[currentSlide].title}
-                </h2>
-                <p className="text-slate-300 text-xs md:text-base max-w-lg font-medium leading-relaxed">
-                  {portfolioSlides[currentSlide].desc}
-                </p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="absolute bottom-10 right-10 flex gap-2 z-20">
-            {portfolioSlides.map((_, i) => (
-              <button 
-                key={i} 
-                onClick={() => setCurrentSlide(i)}
-                className={`h-1 rounded-full transition-all duration-500 ${currentSlide === i ? 'w-8 bg-primary-500' : 'w-2 bg-white/40'}`}
-              ></button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* YouTube Video Section - Now matching exactly the carousel size and constraints */}
-      <section className="max-w-6xl mx-auto px-6 mb-24">
-        <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-8 gap-4 text-center md:text-left">
-           <div className="space-y-1">
-              <h3 className="text-xl md:text-3xl font-black text-slate-900 dark:text-white uppercase font-display">
-                Engenharia em <span className="text-primary-500">Movimento</span>
-              </h3>
-              <p className="text-slate-500 dark:text-slate-400 text-[9px] uppercase tracking-widest font-bold">
-                Assista nossos processos e resultados técnicos
-              </p>
-           </div>
-           <div className="h-px flex-1 bg-slate-200 dark:bg-slate-800 mx-6 hidden md:block"></div>
-           <div className="flex items-center gap-2 opacity-40">
-             <span className="material-icons-outlined text-3xl text-primary-500">play_circle</span>
-           </div>
-        </div>
-
-        <div className="relative h-[350px] md:h-[550px] w-full rounded-[2.5rem] overflow-hidden shadow-2xl border border-slate-200 dark:border-white/10 group bg-slate-900">
-          <div className="absolute inset-0 bg-primary-500/5 animate-pulse group-hover:opacity-0 transition-opacity pointer-events-none z-0"></div>
-          <iframe 
-            className="w-full h-full relative z-10"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-            title="Apresentação CidEngenharia"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
-        </div>
+      {/* Projects List */}
+      <section className="max-w-6xl mx-auto px-6 space-y-8">
+        {projects.map((project, idx) => (
+          <ProjectCard 
+            key={project.title}
+            {...project}
+            image={actualProjectImages[idx]}
+          />
+        ))}
       </section>
 
       {/* Bottom CTA Section */}
-      <section className="max-w-4xl mx-auto px-8">
+      <section className="max-w-4xl mx-auto px-8 mt-32">
         <div className="p-10 md:p-16 bg-slate-900 rounded-[3rem] md:rounded-[4rem] relative overflow-hidden group shadow-2xl border border-white/5">
            <div className="engineering-grid absolute inset-0 opacity-10"></div>
            <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary-500/20 rounded-full blur-[100px] animate-pulse"></div>
            
            <div className="relative z-10 text-center space-y-6">
               <h2 className="text-2xl md:text-4xl font-black text-white uppercase font-display tracking-tight leading-none">
-                Sua marca, nossa <br/><span className="text-primary-500 italic">Engenharia Visual</span>
+                Sua visão transformada em <br/><span className="text-primary-500 italic">Código de Elite</span>
               </h2>
               <p className="text-slate-400 text-xs md:text-base max-w-lg mx-auto leading-relaxed font-light">
-                Desenvolvemos projetos originais que unem a precisão técnica ao design de impacto. Vamos conversar?
+                Desenvolvemos sistemas customizados com a mais alta tecnologia e design premium. Vamos tirar sua ideia do papel?
               </p>
               <div className="flex justify-center pt-4">
                  <a href="https://wa.me/5571984184782" className="group flex items-center gap-3 px-10 py-4 bg-primary-500 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-2xl shadow-primary-500/20 hover:scale-105 transition-all active:scale-95">
-                   Falar com Sidney Sales
+                   Iniciar Projeto Premium
                    <span className="material-icons-outlined text-sm group-hover:rotate-12 transition-transform">bolt</span>
                  </a>
               </div>

@@ -125,10 +125,34 @@ export const AdminLogin: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full bg-white dark:bg-slate-900/40 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-[3rem] p-10 md:p-14 shadow-2xl space-y-8 relative z-10"
       >
-        <div className="text-center space-y-3">
-          <div className="w-20 h-20 bg-primary-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-primary-500/20 group hover:rotate-[360deg] transition-transform duration-1000">
-            <span className="material-icons-outlined text-white text-4xl">admin_panel_settings</span>
-          </div>
+        <div className="text-center space-y-4">
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.1, 1],
+            }}
+            transition={{ 
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="w-20 h-20 bg-primary-500 rounded-3xl flex items-center justify-center mx-auto mb-2 shadow-xl shadow-primary-500/20 relative group"
+          >
+            <motion.span 
+              animate={{ 
+                content: ["lock", "lock_open", "lock"],
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                times: [0, 0.5, 1],
+                repeatDelay: 2
+              }}
+              className="material-icons-outlined text-white text-4xl"
+            >
+              lock
+            </motion.span>
+          </motion.div>
+          
           <h1 className="text-3xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter leading-none">
             Acesso <span className="text-primary-500 italic">Estratégico</span>
           </h1>

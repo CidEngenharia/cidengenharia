@@ -2,68 +2,309 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLang } from '../lib/LangContext';
 
-const Icon360 = () => (
-  <div className="relative inline-flex items-center justify-center align-middle">
-    <svg
-      viewBox="0 0 100 100"
-      className="w-16 sm:w-20 md:w-24 h-auto drop-shadow-xl"
+const AntigravityCursor = () => (
+  <div className="relative inline-flex items-center justify-center h-full" style={{ width: '14px' }}>
+    {/* Outer glow halo — pulses continuously */}
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      animate={{ opacity: [0.3, 0.75, 0.3], scaleX: [1, 2, 1], scaleY: [1, 1.15, 1] }}
+      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      style={{
+        inset: '-4px -8px',
+        background: 'radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.5) 0%, rgba(59,130,246,0.2) 60%, transparent 100%)',
+        filter: 'blur(8px)',
+      }}
+    />
+    {/* Cursor bar — blinks like a real text caret */}
+    <motion.svg
+      viewBox="0 0 8 56"
+      className="relative h-full w-auto"
+      preserveAspectRatio="none"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      animate={{ opacity: [1, 1, 0, 0] }}
+      transition={{
+        duration: 1.1,
+        repeat: Infinity,
+        times: [0, 0.45, 0.5, 0.95],
+        ease: 'linear',
+      }}
     >
       <defs>
-        <linearGradient id="brandGradientHome" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10b981" />
-          <stop offset="50%" stopColor="#3b82f6" />
-          <stop offset="100%" stopColor="#34d399" />
+        <linearGradient id="cursorRainbow" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%"   stopColor="#3b82f6" />
+          <stop offset="30%"  stopColor="#22c55e" />
+          <stop offset="60%"  stopColor="#eab308" />
+          <stop offset="82%"  stopColor="#f97316" />
+          <stop offset="100%" stopColor="#ef4444" />
         </linearGradient>
+        <filter id="cursorGlow" x="-100%" y="-5%" width="300%" height="110%">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
       </defs>
-      <path d="M50,15 C62,15 62,85 50,85 C38,85 38,15 50,15" stroke="url(#brandGradientHome)" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
-      <path d="M15,50 C15,38 85,38 85,50 C85,62 15,62 15,50" stroke="url(#brandGradientHome)" strokeWidth="2.5" strokeLinecap="round" />
-      <text x="50" y="56" textAnchor="middle" className="font-black" fontSize="24" style={{ fill: 'url(#brandGradientHome)', fontFamily: 'Space Grotesk, sans-serif' }}>360</text>
-      <circle cx="74" cy="42" r="3" stroke="url(#brandGradientHome)" strokeWidth="1.5" />
-    </svg>
+      <rect x="1.5" y="1" width="5" height="54" rx="2.5" ry="2.5"
+        fill="url(#cursorRainbow)"
+        filter="url(#cursorGlow)"
+      />
+      <rect x="2.2" y="2" width="1.8" height="24" rx="1"
+        fill="white" opacity="0.28"
+      />
+    </motion.svg>
   </div>
 );
 
-export const Home: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const socialLinks = {
-    whatsapp: () => window.open('https://wa.me/5571984184782', '_blank'),
-    instagram: () => window.open('https://instagram.com/cidengenharia', '_blank'),
-    facebook: () => window.open('https://facebook.com/cididentidadevisual', '_blank'),
-    linkedin: () => window.open('https://linkedin.com/in/sidneysales', '_blank'),
-    youtube: () => window.open('https://youtube.com/@cidengenharia', '_blank'),
-    x: () => window.open('https://x.com/cidengenharia', '_blank'),
+const TypewriterText = ({ text, delay = 0 }: { text: string; delay?: number }) => {
+  const [displayText, setDisplayText] = useState("");
+  
+  useEffect(() => {
+    let timeout: any;
+    let currentIndex = 0;
+    
+    const startTimeout = setTimeout(() => {
+      const type = () => {
+        if (currentIndex <= text.length) {
+          setDisplayText(text.slice(0, currentIndex));
+          currentIndex++;
+          timeout = setTimeout(type, 100);
+        }
+      };
+      type();
+    }, delay * 1000);
+    
+    return () => {
+      clearTimeout(startTimeout);
+      clearTimeout(timeout);
+    };
+  }, [text, delay]);
+  
+  return (
+    <span className="text-white">
+      {displayText}
+      <motion.span
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
+        className="inline-block w-[3px] h-[0.9em] bg-violet-400 ml-1 align-bottom"
+      />
+    </span>
+  );
+};
+
+const Stats = () => {
+  const stats = [
+    { number: "20x", text: "Resultados mais rápidos do que com o desenvolvimento convencional.", gradient: "from-[#4f46e5] to-[#7c3aed]" },
+    { number: "+80", text: "Horas de economia de trabalhos manuais.", gradient: "from-[#ec4899] to-[#db2777]" },
+    { number: "10x", text: "Mais produtos testados diariamente", gradient: "from-[#0ea5e9] to-[#2563eb]" },
+    { number: "-R$", text: "Economize +R$ em custos com desenvolvimento. Tire a idéia do papel.", gradient: "from-[#10b981] to-[#059669]" },
+  ];
+
+  return (
+    <div className="mb-20">
+      <motion.p 
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-[#fbbf24] mb-8 drop-shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+      >
+        Seus projetos com...
+      </motion.p>
+      
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        {stats.map((stat, i) => (
+          <motion.div 
+            key={i} 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="flex flex-col gap-1"
+          >
+            <span className={`text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br ${stat.gradient} tracking-tighter drop-shadow-sm`}>
+              {stat.number}
+            </span>
+            <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-wider leading-tight max-w-[200px] opacity-80">
+              {stat.text}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const DraftForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    whatsapp: '',
+    projectName: '',
+    budget: '',
+    layoutIdeas: '',
+    details: ''
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const message = `Olá Sidney! Gostaria de fazer um rascunho de projeto:%0A%0A` +
+      `*Nome:* ${formData.name}%0A` +
+      `*WhatsApp:* ${formData.whatsapp}%0A` +
+      `*Projeto:* ${formData.projectName}%0A` +
+      `*Orçamento:* ${formData.budget}%0A` +
+      `*Ideias de Layout:* ${formData.layoutIdeas}%0A` +
+      `*Detalhes:* ${formData.details}`;
+    
+    window.open(`https://wa.me/5571984184782?text=${message}`, '_blank');
+    setSubmitted(true);
   };
 
-  const carouselItems = [
-    {
-      url: '/carousel_networking.jpg',
-      title: 'Networking Inteligente',
-      description: 'Ecossistema DyCard: Cartão Digital, NFC e QR Code. Segurança e conexão instantânea para o seu networking profissional.',
-      category: 'INOVAÇÃO'
-    },
-    {
-      url: '/carousel_identity.png',
-      title: 'Identidade Visual & IA',
-      description: 'Transformação de branding utilizando engenharia visual aplicada e inteligência artificial generativa de última geração.',
-      category: 'DESIGN'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
-      title: 'Engenharia de Dados',
-      description: 'Visualização complexa e dashboards estratégicos para tomada de decisão baseada em métricas de alta fidelidade.',
-      category: 'TECNOLOGIA'
-    },
-    {
-      url: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
-      title: 'Studio de Criação',
-      description: 'Espaço físico e digital dedicado à manufatura técnica de peças em fibra, metal e soluções em comunicação visual premium.',
-      category: 'PRODUÇÃO'
-    }
+  return (
+    <section className="py-24 px-6 md:px-24 max-w-4xl mx-auto relative z-10">
+      <div className="text-center mb-12">
+        <h2 className="text-4xl md:text-5xl font-black text-[#fbbf24] uppercase tracking-tighter mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]">
+          Vamos fazer um rascunho?
+        </h2>
+        <div className="w-24 h-1 bg-[#fbbf24] mx-auto rounded-full opacity-50"></div>
+      </div>
+
+      <AnimatePresence mode="wait">
+        {!submitted ? (
+          <motion.form 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white/5 backdrop-blur-xl p-8 md:p-12 rounded-[2.5rem] border border-white/10 shadow-2xl"
+          >
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Qual seu nome?</label>
+              <input 
+                required
+                type="text" 
+                placeholder="Seu nome completo"
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                value={formData.name}
+                onChange={e => setFormData({...formData, name: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Qual seu WhatsApp?</label>
+              <input 
+                required
+                type="tel" 
+                placeholder="(00) 00000-0000"
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                value={formData.whatsapp}
+                onChange={e => setFormData({...formData, whatsapp: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Qual nome do seu projeto?</label>
+              <input 
+                required
+                type="text" 
+                placeholder="Ex: App de Delivery"
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                value={formData.projectName}
+                onChange={e => setFormData({...formData, projectName: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Até quanto deseja gastar?</label>
+              <input 
+                required
+                type="text" 
+                placeholder="Seu orçamento estimado"
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                value={formData.budget}
+                onChange={e => setFormData({...formData, budget: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Já tem alguma ideia do layout?</label>
+              <input 
+                type="text" 
+                placeholder="Cores, referências, estilo..."
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600"
+                value={formData.layoutIdeas}
+                onChange={e => setFormData({...formData, layoutIdeas: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2 space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] ml-2">Descreva detalhes do projeto</label>
+              <textarea 
+                required
+                rows={4}
+                placeholder="Conte-nos um pouco mais sobre sua ideia..."
+                className="w-full bg-slate-900/50 border border-white/5 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-600 resize-none"
+                value={formData.details}
+                onChange={e => setFormData({...formData, details: e.target.value})}
+              />
+            </div>
+            <div className="md:col-span-2 pt-4">
+              <button 
+                type="submit"
+                className="w-full py-5 bg-[#fbbf24] hover:bg-[#f59e0b] text-slate-950 font-black rounded-2xl uppercase tracking-[0.2em] transition-all hover:scale-[1.02] active:scale-95 shadow-[0_15px_30px_rgba(251,191,36,0.2)] flex items-center justify-center gap-3"
+              >
+                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+                Enviar Rascunho
+              </button>
+            </div>
+          </motion.form>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-emerald-500/10 border border-emerald-500/20 p-12 rounded-[2.5rem] text-center backdrop-blur-xl"
+          >
+            <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(16,185,129,0.4)]">
+              <svg className="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Mensagem enviada com sucesso!</h3>
+            <p className="text-emerald-400 font-medium">Em breve entraremos em contato.</p>
+            <button 
+              onClick={() => setSubmitted(false)}
+              className="mt-8 text-white/40 hover:text-white underline text-xs font-bold uppercase tracking-widest"
+            >
+              Enviar outro rascunho
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+};
+
+export const Home: React.FC = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { t } = useLang();
+
+  // Enhanced Background bubbles configuration - more visible
+  const bgBubbles = [
+    { size: 'w-[45%] h-[45%]', pos: 'top-[-15%] right-[-10%]', color: 'rgba(109,40,217,0.4)', delay: 0, duration: 8 },
+    { size: 'w-[40%] h-[40%]', pos: 'bottom-[-5%] left-[-5%]', color: 'rgba(37,99,235,0.3)', delay: 2, duration: 12 },
+    { size: 'w-[25%] h-[25%]', pos: 'top-[30%] left-[5%]', color: 'rgba(139,92,246,0.35)', delay: 1, duration: 10 },
+    { size: 'w-[30%] h-[30%]', pos: 'bottom-[30%] right-[10%]', color: 'rgba(79,70,229,0.3)', delay: 3, duration: 15 },
+    { size: 'w-[20%] h-[20%]', pos: 'top-[45%] right-[25%]', color: 'rgba(99,102,241,0.25)', delay: 5, duration: 18 },
+    { size: 'w-[22%] h-[22%]', pos: 'bottom-[45%] left-[15%]', color: 'rgba(167,139,250,0.35)', delay: 4, duration: 14 },
+    { size: 'w-[28%] h-[28%]', pos: 'top-[15%] left-[35%]', color: 'rgba(30,58,138,0.4)', delay: 6, duration: 20 },
   ];
+
+  const carouselItems = t.carouselTitles.map((title, i) => ({
+    url: [
+      '/carousel_networking.jpg',
+      '/carousel_identity.png',
+      'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200',
+      'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=1200',
+    ][i],
+    title,
+    description: t.carouselDescs[i],
+    category: t.carouselCategories[i],
+  }));
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentSlide((prev) => (prev + 1) % carouselItems.length), 6000);
@@ -71,76 +312,118 @@ export const Home: React.FC = () => {
   }, [carouselItems.length]);
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-slate-50 dark:bg-[#020617] transition-colors duration-500 font-body">
-      <div className="absolute top-0 right-0 w-full max-w-[600px] h-[600px] bg-primary-500/5 rounded-full blur-[120px] -z-10"></div>
+    <div className="relative overflow-hidden min-h-screen bg-slate-50 dark:bg-[#080a12] transition-colors duration-500 font-body">
 
-      <section className="flex flex-col items-center lg:items-end justify-center px-6 md:px-24 py-20 md:py-32 text-center lg:text-right min-h-[85vh] max-w-7xl mx-auto relative z-10">
+      {/* ===== ANIMATED BACKGROUND - Scattered Bubbles ===== */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {bgBubbles.map((bubble, i) => (
+          <motion.div
+            key={i}
+            animate={{ 
+              scale: [1, 1.3, 1], 
+              opacity: [0.4, 0.8, 0.4],
+              x: [0, Math.sin(i * 15) * 60, 0],
+              y: [0, Math.cos(i * 15) * 40, 0]
+            }}
+            transition={{ 
+              duration: bubble.duration, 
+              repeat: Infinity, 
+              ease: 'easeInOut', 
+              delay: bubble.delay 
+            }}
+            className={`absolute ${bubble.size} ${bubble.pos} rounded-full`}
+            style={{
+              background: `radial-gradient(circle, ${bubble.color} 0%, transparent 85%)`,
+              filter: 'blur(70px)',
+              mixBlendMode: 'plus-lighter'
+            }}
+          />
+        ))}
+      </div>
 
+      {/* ===== HERO SECTION ===== */}
+      <section className="flex flex-col items-center lg:items-start justify-center px-6 md:px-24 py-20 md:py-32 min-h-[85vh] max-w-7xl mx-auto relative z-10">
+
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-widest text-primary-500 mb-10 shadow-sm"
+          transition={{ delay: 0.1 }}
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-300 mb-8 backdrop-blur-sm"
         >
-          Studio de Engenharia Visual Premium
+          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+          {t.badge}
         </motion.div>
 
-        <div className="flex flex-col items-center lg:items-end mb-10">
-          <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-10 mb-4">
-            <Icon360 />
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter leading-none font-display text-transparent bg-clip-text bg-gradient-to-r from-[#10b981] via-[#3b82f6] to-[#34d399] transition-all duration-500">
-              CidEngenharia
-            </h1>
-          </div>
+        {/* Logo + Brand Name + Typewriter */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-col xl:flex-row items-center xl:items-center gap-x-4 mb-4 text-center xl:text-left"
+        >
           <div className="flex items-center gap-4">
-            <div className="h-px w-12 bg-primary-500/50"></div>
-            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm tracking-[0.2em] font-medium uppercase">
-              Observando todos os aspectos da engenharia
-            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1]">
+              {t.brand}
+            </h2>
           </div>
-        </div>
-
-        <p className="text-lg md:text-2xl text-slate-500 dark:text-slate-400 max-w-2xl font-light leading-relaxed mb-12">
-          A união perfeita entre precisão técnica e visão estratégica para o seu negócio.
-        </p>
-
-        <div className="flex flex-wrap justify-center lg:justify-end gap-4 mb-16">
-          <Link to="/services" className="px-10 py-5 bg-primary-500 hover:bg-primary-600 text-white font-black rounded-2xl shadow-xl shadow-primary-500/20 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[10px]">
-            Nossas Soluções
-          </Link>
-          <Link to="/portfolio" className="px-10 py-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white font-black rounded-2xl shadow-lg transition-all hover:bg-slate-50 dark:hover:bg-white/5 uppercase tracking-widest text-[10px]">
-            Ver Portfólio
-          </Link>
-        </div>
-
-        {/* Social Icons Section - Mirroring Services Page */}
-        <div className="flex flex-col items-center lg:items-end gap-6 py-2">
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Nossas Redes Sociais</span>
-          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-8 md:gap-10">
-            <button onClick={socialLinks.whatsapp} title="WhatsApp" className="text-slate-400 hover:text-[#25D366] transition-all transform hover:scale-125">
-              <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-            </button>
-            <button onClick={socialLinks.instagram} title="Instagram" className="text-slate-400 hover:text-[#E4405F] transition-all transform hover:scale-125">
-              <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6m8.4 1.5a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z" /></svg>
-            </button>
-            <button onClick={socialLinks.facebook} title="Facebook" className="text-slate-400 hover:text-[#1877F2] transition-all transform hover:scale-125">
-              <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7h-2.54v-2.9h2.54V9.82c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19V8.6h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 0 0 8.44-9.9c0-5.53-4.5-10.02-10-10.02z" /></svg>
-            </button>
-            <button onClick={socialLinks.linkedin} title="LinkedIn" className="text-slate-400 hover:text-[#0A66C2] transition-all transform hover:scale-125">
-              <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" /></svg>
-            </button>
-            <button onClick={socialLinks.youtube} title="YouTube" className="text-slate-400 hover:text-[#FF0000] transition-all transform hover:scale-125">
-              <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z" /></svg>
-            </button>
-            <button onClick={socialLinks.x} title="X" className="text-slate-400 hover:text-black dark:hover:text-white transition-all transform hover:scale-125">
-              <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
-            </button>
+          <div className="text-3xl sm:text-4xl md:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
+             <TypewriterText text=", e ai vamos codar?" delay={1} />
           </div>
-        </div>
+        </motion.div>
+
+        {/* MAIN HERO TEXT — "Fábrica Dev" destaque como "O ouro da IA" no au4.ai */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mb-8"
+        >
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight">
+            <span className="text-[#fbbf24] drop-shadow-[0_0_30px_rgba(251,191,36,0.4)]">
+              {t.heroTitle}
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-semibold leading-relaxed mb-10"
+        >
+          {t.heroDesc}
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex flex-wrap gap-4 mb-14"
+        >
+          <Link
+            to="/services"
+            className="px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white font-black rounded-xl shadow-lg shadow-violet-600/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px]"
+          >
+            {t.ctaSolutions}
+          </Link>
+          <Link
+            to="/portfolio"
+            className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white font-black rounded-xl transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px] backdrop-blur-sm"
+          >
+            {t.ctaPortfolio}
+          </Link>
+        </motion.div>
       </section>
 
-      {/* Carousel Section */}
-      <section className="px-6 md:px-24 pb-32 max-w-7xl mx-auto">
-        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] max-h-[600px] rounded-[3rem] overflow-hidden shadow-2xl group border border-slate-200 dark:border-white/10">
+      {/* ===== CAROUSEL SECTION ===== */}
+      <section className="px-6 md:px-24 pb-16 max-w-7xl mx-auto relative z-10">
+        {/* Stats Section added above Carousel */}
+        <Stats />
+
+        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] max-h-[600px] rounded-[2rem] overflow-hidden shadow-2xl group border border-white/5">
           <AnimatePresence mode='wait'>
             <motion.div
               key={currentSlide}
@@ -154,7 +437,7 @@ export const Home: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
 
               <div className="absolute bottom-12 left-12 right-12 text-left">
-                <span className="text-[10px] font-black bg-primary-500 text-white px-4 py-1.5 rounded-full tracking-widest mb-4 inline-block uppercase">
+                <span className="text-[10px] font-black bg-violet-600 text-white px-4 py-1.5 rounded-full tracking-widest mb-4 inline-block uppercase">
                   {carouselItems[currentSlide].category}
                 </span>
                 <h2 className="text-3xl md:text-5xl font-black text-white uppercase font-display tracking-tight mb-2">
@@ -172,12 +455,17 @@ export const Home: React.FC = () => {
               <button
                 key={i}
                 onClick={() => setCurrentSlide(i)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${currentSlide === i ? 'w-8 bg-primary-500' : 'w-2 bg-white/40'}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${currentSlide === i ? 'w-8 bg-violet-500' : 'w-2 bg-white/40'}`}
               ></button>
             ))}
           </div>
         </div>
       </section>
+
+      {/* ===== DRAFT FORM SECTION ===== */}
+      <DraftForm />
+      
+      <div className="pb-24"></div>
     </div>
   );
 };

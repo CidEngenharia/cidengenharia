@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 interface NavItemProps {
   to: string;
@@ -34,32 +34,32 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   return (
-    <aside className={`fixed left-0 top-0 h-screen z-50 bg-white/30 dark:bg-[#020617]/40 backdrop-blur-3xl border-r border-slate-200/30 dark:border-white/5 transition-all duration-500 flex flex-col overflow-hidden shadow-2xl ${isOpen ? 'w-64' : 'w-20'
+    <aside className={`fixed left-0 top-0 h-screen z-50 bg-white/30 dark:bg-[#06070a]/60 backdrop-blur-3xl border-r border-slate-200/30 dark:border-white/5 transition-all duration-500 flex flex-col overflow-hidden shadow-2xl ${isOpen ? 'w-64' : 'w-20'
       }`}>
-      <div className="h-20 flex items-center justify-between px-4 mt-2">
-        <div className={`transition-all duration-500 overflow-hidden ${isOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0'}`}>
-          <Link to="/" className="flex items-center gap-3 min-w-max">
-            <div className="w-10 h-10 flex items-center justify-center">
-              <span className="material-icons-outlined text-2xl text-primary-500">engineering</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-black tracking-tight whitespace-nowrap leading-none text-slate-800 dark:text-slate-100">
-                CidEngenharia
-              </span>
-              <span className="text-[9px] text-primary-500 mt-1 leading-none font-bold">
-                360° Vision
-              </span>
-            </div>
-          </Link>
-        </div>
-
+      {/* Header: hamburger + "Menu" label */}
+      <div className="h-20 flex items-center px-4 mt-2">
         <button
           onClick={onToggle}
-          className={`p-2 rounded-lg hover:bg-slate-500/10 text-slate-400 hover:text-primary-400 transition-all active:scale-95 ${!isOpen ? 'mx-auto' : ''}`}
-          title={isOpen ? "Fechar menu" : "Abrir menu"}
+          className={`flex items-center gap-3 p-2 rounded-lg hover:bg-slate-500/10 text-slate-400 hover:text-primary-400 transition-all active:scale-95 w-full ${!isOpen ? 'justify-center' : ''}`}
+          title={isOpen ? 'Fechar menu' : 'Abrir menu'}
         >
-          <span className="material-icons-outlined text-2xl">
-            {isOpen ? 'meeting_room' : 'sensor_door'}
+          {/* Hamburger SVG icon */}
+          <svg
+            className="w-6 h-6 flex-shrink-0"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+          >
+            <line x1="3" y1="6"  x2="21" y2="6"  />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+
+          {/* "Menu" label — visible only when sidebar is open */}
+          <span className={`text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all duration-300 overflow-hidden ${isOpen ? 'opacity-100 w-auto translate-x-0' : 'opacity-0 w-0 -translate-x-2'}`}>
+            Menu
           </span>
         </button>
       </div>
@@ -75,14 +75,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         <NavItem to="/shop" icon="apps" label="Apps" isOpen={isOpen} />
       </nav>
 
-      <div className="p-4 border-t border-slate-200/30 dark:border-white/5">
+      <div className="p-4 border-t border-slate-200/30 dark:border-white/5 opacity-40">
         <div className={`flex items-center gap-3 overflow-hidden transition-all duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
-          <div className="w-8 h-8 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-500 font-bold text-xs">
-            SF
+          <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center text-violet-400 font-bold text-[10px] tracking-tighter">
+            CE
           </div>
           <div className="flex flex-col">
-            <span className="text-xs font-bold text-slate-700 dark:text-slate-200">Sidney França</span>
-            <span className="text-[10px] text-slate-500">Premium Plan</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Plataforma</span>
+            <span className="text-[9px] text-slate-500">v2.4.0</span>
           </div>
         </div>
       </div>

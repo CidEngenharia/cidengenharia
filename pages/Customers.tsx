@@ -144,8 +144,8 @@ export const Customers: React.FC = () => {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-slate-800 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
           Portfolio de Marcas
         </div>
-        <h1 className="text-4xl md:text-7xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter leading-none">
-          Parceiros de <span className="text-primary-500 italic">Negócio</span>
+        <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter leading-none">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-500">Parceiros de</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-violet-400 italic">Negócio</span>
         </h1>
         <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xl mx-auto">Empresas que confiam na CidEngenharia para suas soluções de identidade e tecnologia.</p>
       </header>
@@ -220,7 +220,7 @@ export const Customers: React.FC = () => {
                     {photoPreview ? <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary-500 shadow-xl"><img src={photoPreview} className="w-full h-full object-cover" /></div> : <><span className="material-icons-outlined text-3xl text-white/20">add_a_photo</span><span className="text-[10px] font-bold uppercase text-white/40 tracking-widest">Foto de Perfil</span></>}
                     <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handlePhotoUpload} />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full h-20 bg-primary-500 text-white font-black rounded-[2rem] uppercase text-xs tracking-[0.2em] shadow-2xl shadow-primary-500/30 disabled:opacity-50 transition-all active:scale-95 hover:bg-primary-600">
+                  <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-primary-500 text-white font-black rounded-2xl uppercase text-[10px] tracking-[0.2em] shadow-2xl shadow-primary-500/30 disabled:opacity-50 transition-all active:scale-95 hover:bg-primary-600">
                     {isSubmitting ? 'Sincronizando...' : 'Publicar Depoimento'}
                   </button>
                 </div>
