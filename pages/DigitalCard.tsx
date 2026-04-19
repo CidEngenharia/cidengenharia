@@ -80,7 +80,7 @@ export const DigitalCard: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] font-body pb-20 overflow-hidden relative">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-8 py-20 flex flex-col lg:flex-row items-center gap-16 relative">
+      <section className="max-w-7xl mx-auto px-8 pb-20 pt-36 md:pt-48 flex flex-col lg:flex-row items-center gap-16 relative">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] -z-10"></div>
         
         <div className="lg:w-1/2 space-y-8 text-center lg:text-left">

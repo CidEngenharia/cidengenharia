@@ -119,7 +119,7 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 lg:py-16">
+    <div className="max-w-6xl mx-auto px-4 pb-8 pt-36 md:pt-48 lg:pb-16">
       <div className="bg-white dark:bg-slate-900 rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-slate-200 dark:border-slate-800">
 
         {/* Lado Esquerdo - Info: Fundo bg-slate-900 (igual sidebar) no dia, bg-slate-950 na noite */}

@@ -121,7 +121,7 @@ export const Portfolio: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] pb-32 transition-colors duration-500 font-body">
       {/* Header Section */}
-      <header className="max-w-6xl mx-auto px-8 pt-24 pb-16 flex flex-col items-center text-center space-y-4">
+      <header className="max-w-6xl mx-auto px-8 pt-36 md:pt-48 pb-16 flex flex-col items-center text-center space-y-4">
         <div className="space-y-4">
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tight leading-none">
             Portfólio de <span className="text-primary-500 italic">Sistemas Web</span>

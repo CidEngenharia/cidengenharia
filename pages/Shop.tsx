@@ -109,7 +109,7 @@ export const Shop: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] p-6 md:p-12 lg:p-20 transition-colors duration-500">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] px-6 pt-36 pb-6 md:px-12 md:pt-48 md:pb-12 lg:px-20 lg:pt-48 lg:pb-20 transition-colors duration-500">
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-500/5 rounded-full blur-[150px] -z-10"></div>
 
       <header className="max-w-7xl mx-auto mb-16 text-center space-y-4">

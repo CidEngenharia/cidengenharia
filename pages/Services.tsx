@@ -91,14 +91,14 @@ const servicesData: ServiceDetail[] = [
     color: 'bg-blue-800'
   },
   {
-    id: 'fiber-metal',
-    title: 'Peças em Fibra & Metal',
+    id: 'web-systems',
+    title: 'Desenvolvimento de Sistemas Web',
     price: 'Sob Consulta',
-    icon: 'precision_manufacturing',
-    desc: 'Criação e modelagem de peças técnicas em fibra de vidro e estruturas metálicas customizadas.',
-    features: ['Laminação em Fibra', 'Soldagem Especializada', 'Pintura Automotiva', 'Alta Resistência'],
-    fullDesc: 'Unimos a leveza da fibra de vidro com a robustez do metal. Desenvolvemos desde carenagens personalizadas até estruturas metálicas industriais sob medida, garantindo durabilidade e acabamento premium para projetos de engenharia visual.',
-    color: 'bg-orange-600'
+    icon: 'devices',
+    desc: 'Saas, CRM, Sistemas de Gestão, Sistemas de Controle',
+    features: ['SaaS de Performance', 'CRM Inteligente', 'Sistemas de Gestão', 'Sistemas de Controle'],
+    fullDesc: 'Desenvolvemos sistemas web modernos e escaláveis utilizando as tecnologias mais avançadas do mercado. De plataformas SaaS complexas a sistemas de gestão internos (CRM/ERP), entregamos soluções que otimizam processos e impulsionam o crescimento tecnológico do seu negócio.',
+    color: 'bg-primary-600'
   },
   {
     id: 'custom-products',
@@ -130,28 +130,8 @@ const servicesData: ServiceDetail[] = [
     features: ['Adesivos Automotivos', 'Personalização para Empresas', 'Recorte Eletrônico', 'Consultar Condições'],
     fullDesc: 'Trabalhamos com adesivagem técnica de alta performance. O adesivo em vinil oferece versatilidade para sinalização externa e interna, enquanto o acabamento resinado proporciona um efeito 3D sofisticado, alta proteção contra raios UV e durabilidade extrema, sendo ideal para identificação de marcas em frotas ou equipamentos premium.',
     color: 'bg-teal-500'
-  },
-  {
-    id: 'part-custom',
-    title: 'Customização de Peças',
-    price: 'Sob Consulta',
-    icon: 'construction',
-    desc: 'Modificação técnica e visual de peças industriais ou artísticas.',
-    features: ['Engenharia 360°', 'Modelagem 3D', 'Pintura especial', 'Prototipagem'],
-    fullDesc: 'Serviço especializado em alterar a estética e funcionalidade de peças. Utilizamos engenharia reversa e design industrial para criar customizações únicas em hardware, veículos ou mobiliário.',
-    color: 'bg-slate-700'
-  },
-  {
-    id: 'gps-button',
-    title: 'Butom Localizador GPS',
-    price: '29,99',
-    icon: 'location_on',
-    desc: 'Segurança inteligente para pessoas, pets ou objetos valiosos.',
-    features: ['Rastreio em tempo real', 'App integrado', 'Bateria de longa duração', 'Alertas de zona'],
-    fullDesc: 'Um dispositivo compacto e elegante que se integra ao seu smartphone. Localize em tempo real o que é importante para você com precisão cirúrgica e histórico de movimentação.',
-    color: 'bg-blue-600'
-  },
-  {
+   },
+   {
     id: 'ai-prompts',
     title: 'Prompts IA',
     price: '59,90',
@@ -332,38 +312,38 @@ const ServiceCard: React.FC<{
   return (
     <div 
       onClick={onSelect}
-      className={`relative flex flex-col p-8 bg-white dark:bg-slate-900 border rounded-[2.5rem] transition-all duration-500 hover:shadow-2xl h-full cursor-pointer group ${
-      isActive ? 'border-primary-500 ring-2 ring-primary-500/20 scale-105 z-10' : 'border-slate-200 dark:border-slate-800'
+      className={`relative flex flex-col p-6 bg-white dark:bg-[#111827] border rounded-2xl transition-all duration-500 hover:shadow-2xl h-full cursor-pointer group ${
+      isActive ? 'border-primary-500 ring-1 ring-primary-500/20 z-10' : 'border-slate-200 dark:border-white/5'
     }`}>
-      <div className="text-center mt-4 mb-6">
-        <div className={`w-16 h-16 mx-auto rounded-2xl ${service.color} text-white flex items-center justify-center mb-4 shadow-lg`}>
-          <span className="material-icons-outlined text-3xl">{service.icon}</span>
+      <div className="flex items-start gap-4 mb-6">
+        <div className="w-12 h-12 rounded-xl bg-slate-50 dark:bg-slate-800/80 flex items-center justify-center shadow-sm border border-slate-200 dark:border-white/5 flex-shrink-0 transition-transform group-hover:scale-110">
+          <span className="material-icons-outlined text-xl text-primary-500/80 dark:text-primary-400">{service.icon}</span>
         </div>
-        <h3 className="text-lg font-bold dark:text-white mb-6 leading-tight uppercase font-display">{service.title}</h3>
+        <div className="space-y-1">
+          <h3 className="text-lg font-bold dark:text-white leading-tight group-hover:text-primary-500 transition-colors">{service.title}</h3>
+          <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+            {service.desc.split('.')[0]}.
+          </p>
+        </div>
       </div>
 
-      <p className="text-xs text-slate-500 dark:text-slate-400 text-center mb-8 line-clamp-2">
-        {service.desc}
-      </p>
-
-      <ul className="space-y-2 mb-10 flex-1">
-        {service.features.slice(0, 4).map((feature, i) => (
-          <li key={i} className="flex items-center gap-2 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-tight">
-            <span className="material-icons-outlined text-primary-500 text-sm">check_circle</span>
-            {feature}
-          </li>
-        ))}
-      </ul>
+      <div className="mb-8 flex-1">
+        <ul className="space-y-3">
+          {service.features.slice(0, 4).map((feature, i) => (
+            <li key={i} className="flex items-center gap-3 text-xs font-medium text-slate-600 dark:text-slate-400">
+              <span className="material-icons-outlined text-[#10b981] text-lg">check</span>
+              {feature}
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <button 
         onClick={(e) => { e.stopPropagation(); onShowDetails(); }}
-        className={`w-full py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest text-center transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2 ${
-        isActive 
-          ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900' 
-          : 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200'
-      }`}>
-        Saber Mais
-        <span className="material-icons-outlined text-sm">info</span>
+        className="w-full py-3.5 bg-slate-900 dark:bg-[#1f2937] hover:bg-slate-800 dark:hover:bg-[#374151] text-white rounded-xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-3 border border-white/5"
+      >
+        Explorar {service.title}
+        <span className="material-icons-outlined text-sm">arrow_forward</span>
       </button>
     </div>
   );
@@ -385,7 +365,7 @@ export const Services: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] pb-32 relative">
-      <section className="max-w-7xl mx-auto px-8 pt-20 text-center space-y-4 mb-12">
+      <section className="max-w-7xl mx-auto px-8 pt-36 md:pt-48 text-center space-y-4 mb-12">
         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-[10px] font-black uppercase tracking-widest text-primary-500 mb-4">
           CidVisual Studio
         </div>
@@ -393,36 +373,11 @@ export const Services: React.FC = () => {
           Soluções em <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-emerald-400 italic">Engenharia 360°</span>
         </h1>
-        <div className="max-w-3xl mx-auto space-y-12">
+        <div className="max-w-3xl mx-auto">
           <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">
             Transforme dados em experiências visuais que inspiram confiança e aceleram decisões. 
             Escolha o serviço ideal para impulsionar seu networking e sua marca.
           </p>
-
-          {/* Seção de Redes Sociais - Links Reais */}
-          <div className="flex flex-col items-center gap-6 py-2 w-fit mx-auto">
-             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Nossas Redes Sociais</span>
-             <div className="flex flex-wrap items-center justify-center gap-8 md:gap-10">
-                <button onClick={socialLinks.whatsapp} title="WhatsApp" className="text-slate-400 hover:text-[#25D366] transition-all transform hover:scale-125">
-                   <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                </button>
-                <button onClick={socialLinks.instagram} title="Instagram" className="text-slate-400 hover:text-[#E4405F] transition-all transform hover:scale-125">
-                   <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4a5.8 5.8 0 0 1-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8A5.8 5.8 0 0 1 7.8 2m-.2 2A3.6 3.6 0 0 0 4 7.6v8.8A3.6 3.6 0 0 0 7.6 20h8.8a3.6 3.6 0 0 0 3.6-3.6V7.6A3.6 3.6 0 0 0 16.4 4H7.6m8.4 1.5a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>
-                </button>
-                <button onClick={socialLinks.facebook} title="Facebook" className="text-slate-400 hover:text-[#1877F2] transition-all transform hover:scale-125">
-                   <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7h-2.54v-2.9h2.54V9.82c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19V8.6h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 0 0 8.44-9.9c0-5.53-4.5-10.02-10-10.02z"/></svg>
-                </button>
-                <button onClick={socialLinks.linkedin} title="LinkedIn" className="text-slate-400 hover:text-[#0A66C2] transition-all transform hover:scale-125">
-                   <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
-                </button>
-                <button onClick={socialLinks.youtube} title="YouTube" className="text-slate-400 hover:text-[#FF0000] transition-all transform hover:scale-125">
-                   <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
-                </button>
-                <button onClick={socialLinks.x} title="X" className="text-slate-400 hover:text-black dark:hover:text-white transition-all transform hover:scale-125">
-                   <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </button>
-             </div>
-          </div>
         </div>
       </section>
 
@@ -445,41 +400,49 @@ export const Services: React.FC = () => {
           <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onClick={() => setShowDetailModal(null)}></div>
           
           <div className={`relative bg-white dark:bg-slate-900 w-full rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row border border-white/10 transition-all duration-500 ${showDetailModal.id === 'banner-print' ? 'max-w-4xl' : 'max-w-2xl'}`}>
-            <div className={`md:w-4/12 ${showDetailModal.color} p-12 text-white flex flex-col justify-center items-center text-center space-y-6 engineering-grid shrink-0`}>
-               <span className="material-icons-outlined text-7xl">{showDetailModal.icon}</span>
-               <div>
-                 <h2 className="text-2xl font-black uppercase font-display leading-tight">{showDetailModal.title}</h2>
-                 <p className="text-white/60 text-[10px] font-black uppercase tracking-widest mt-2">Especificação Técnica</p>
-               </div>
-            </div>
-            
-            <div className="md:w-8/12 p-8 md:p-12 flex flex-col justify-between overflow-y-auto max-h-[90vh]">
-               {showDetailModal.id === 'banner-print' ? (
-                 <BannerConfigurator onClose={() => setShowDetailModal(null)} />
-               ) : (
-                 <>
-                   <div>
-                      <div className="flex justify-between items-start mb-6">
-                        <span className="text-xs font-black uppercase tracking-widest text-primary-500">Detalhes do Serviço</span>
-                        <button onClick={() => setShowDetailModal(null)} className="text-slate-400 hover:text-red-500 transition-colors">
-                          <span className="material-icons-outlined">close</span>
-                        </button>
-                      </div>
-                      
-                      <h3 className="text-xl font-bold dark:text-white mb-4">Sobre este Projeto</h3>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-8">
-                        {showDetailModal.fullDesc}
-                      </p>
-                      
-                      <div className="space-y-3 mb-8">
-                        {showDetailModal.features.map((f, i) => (
-                          <div key={i} className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-300 uppercase tracking-tight">
-                            <div className="w-1.5 h-1.5 bg-primary-500 rounded-full"></div>
-                            {f}
-                          </div>
-                        ))}
-                      </div>
+             <div className="md:w-5/12 hidden md:block relative bg-slate-50 dark:bg-[#020617] border-r border-slate-100 dark:border-white/5">
+                <div className={`absolute top-0 right-0 w-32 h-32 ${showDetailModal.color} opacity-10 blur-[80px]`}></div>
+                <div className="absolute inset-0 engineering-grid opacity-5"></div>
+                <div className="relative h-full flex flex-col justify-center items-center p-12 text-center space-y-6">
+                   <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-xl border border-slate-100 dark:border-white/10">
+                     <span className="material-icons-outlined text-5xl text-primary-500">{showDetailModal.icon}</span>
                    </div>
+                   <div>
+                     <h2 className="text-3xl font-bold dark:text-white leading-tight">{showDetailModal.title}</h2>
+                     <p className="text-primary-500/80 text-[10px] font-black uppercase tracking-widest mt-2">Especificação Técnica</p>
+                   </div>
+                </div>
+             </div>
+             
+             <div className="md:w-7/12 p-8 md:p-12 flex flex-col justify-between overflow-y-auto max-h-[90vh]">
+                {showDetailModal.id === 'banner-print' ? (
+                  <BannerConfigurator onClose={() => setShowDetailModal(null)} />
+                ) : (
+                  <>
+                    <div>
+                       <div className="flex justify-between items-start mb-8">
+                         <div className="space-y-1">
+                           <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary-500">Detalhes do Serviço</span>
+                           <h3 className="text-2xl font-bold dark:text-white">Sobre este Projeto</h3>
+                         </div>
+                         <button onClick={() => setShowDetailModal(null)} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors">
+                           <span className="material-icons-outlined">close</span>
+                         </button>
+                       </div>
+                       
+                       <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-10">
+                         {showDetailModal.fullDesc}
+                       </p>
+                       
+                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 mb-10">
+                         {showDetailModal.features.map((f, i) => (
+                           <div key={i} className="flex items-start gap-3">
+                             <span className="material-icons-outlined text-[#10b981] text-lg mt-0.5">check</span>
+                             <span className="text-xs font-medium text-slate-600 dark:text-slate-300">{f}</span>
+                           </div>
+                         ))}
+                       </div>
+                    </div>
                    
                    <div className="flex gap-4">
                       {showDetailModal.id === 'online-generators' ? (

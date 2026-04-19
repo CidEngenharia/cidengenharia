@@ -3,9 +3,9 @@ export type Lang = 'PT' | 'EN' | 'ES';
 export const translations = {
   PT: {
     badge: 'Plataforma completa de engenharia e IA',
-    brand: 'CidEngenharia',
+    brand: 'Olá!',
     heroTitle: 'Fábrica Dev',
-    heroDesc: 'Utilizando o ouro da IA para transformar seu negócio em soluções digitais premium — identidade visual, sistemas inteligentes e engenharia de ponta.',
+    heroDesc: 'Criamos sistemas Web utilizando o ouro da IA para transformar seu negócio em soluções digitais premium — identidade visual, sistemas inteligentes e engenharia de ponta.',
     ctaSolutions: 'Nossas Soluções',
     ctaPortfolio: 'Ver Portfólio',
     socialLabel: 'Nossas Redes Sociais',
@@ -21,7 +21,7 @@ export const translations = {
   },
   EN: {
     badge: 'Complete engineering and AI platform',
-    brand: 'CidEngineering',
+    brand: 'Hello!',
     heroTitle: 'Dev Factory',
     heroDesc: 'Using the gold of AI to transform your business into premium digital solutions — visual identity, intelligent systems and cutting-edge engineering.',
     ctaSolutions: 'Our Solutions',
@@ -39,7 +39,7 @@ export const translations = {
   },
   ES: {
     badge: 'Plataforma completa de ingeniería e IA',
-    brand: 'CidIngeniería',
+    brand: '¡Hola!',
     heroTitle: 'Fábrica Dev',
     heroDesc: 'Usando el oro de la IA para transformar tu negocio en soluciones digitales premium — identidad visual, sistemas inteligentes e ingeniería de vanguardia.',
     ctaSolutions: 'Nuestras Soluciones',

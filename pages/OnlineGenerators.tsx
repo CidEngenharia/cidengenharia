@@ -111,7 +111,7 @@ export const OnlineGenerators: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] font-roboto transition-colors duration-500 pb-20">
-      <section className="max-w-7xl mx-auto px-6 pt-10 pb-4 text-center space-y-2">
+      <section className="max-w-7xl mx-auto px-6 pt-36 md:pt-48 pb-4 text-center space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/5 border border-primary-500/10 text-[8px] font-black uppercase tracking-widest text-primary-500">
           cidengenharia Intelligence System
         </div>

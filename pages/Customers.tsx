@@ -137,7 +137,7 @@ export const Customers: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] p-8 md:p-16 lg:p-24 transition-colors duration-500 relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-[#020617] px-8 pt-36 pb-8 md:px-16 md:pt-48 md:pb-16 lg:px-24 lg:pt-48 lg:pb-24 transition-colors duration-500 relative overflow-hidden">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-primary-500/5 rounded-full blur-[150px] -z-10"></div>
       
       <header className="max-w-5xl mx-auto text-center space-y-6 mb-24">
