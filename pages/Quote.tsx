@@ -125,11 +125,10 @@ Arquivo Anexo: ${formData.fileName || 'Nenhum'}
         {/* Lado Esquerdo - Info: Fundo bg-slate-900 (igual sidebar) no dia, bg-slate-950 na noite */}
         <div className="lg:w-5/12 bg-slate-900 dark:bg-slate-950 relative flex flex-col justify-between p-12 text-white engineering-grid overflow-hidden transition-colors duration-500">
           <div className="relative z-10">
-            <div className="w-12 h-12 bg-primary-500 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-primary-500/20">
-              <span className="material-icons-outlined">engineering</span>
-            </div>
             <h2 className="text-4xl font-black mb-6 font-display leading-tight uppercase tracking-tighter">
-              Engenharia Visual de <span className="text-primary-500 italic">Alta Performance</span>.
+              <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">
+                Engenharia Visual de Alta Performance.
+              </span>
             </h2>
             <p className="text-slate-400 text-lg font-medium leading-relaxed mb-8">
               Preencha os detalhes e nossa equipe (apoiada por IA) analisará a viabilidade técnica do seu projeto em tempo recorde.

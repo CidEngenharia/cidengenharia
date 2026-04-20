@@ -88,8 +88,10 @@ export const DigitalCard: React.FC = () => {
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-secondary/10 border border-secondary/20 text-[10px] font-black uppercase tracking-widest text-secondary mb-6">
               Networking do Futuro
             </div>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 font-display leading-[0.95] uppercase text-slate-900 dark:text-white">
-              Conheça o <br /> <span className="text-secondary">DyCard</span>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter mb-6 font-display leading-[0.95] uppercase">
+              <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">
+                Conheça o <br /> DyCard
+              </span>
             </h1>
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto lg:ml-0">
               O cartão de visita inteligente que revoluciona a forma de fazer networking, o chaveiro com os dados do seu PET, Tecnologias NFC e QRCODE que conecta instantaneamente seus contatos e seu perfil digital. 

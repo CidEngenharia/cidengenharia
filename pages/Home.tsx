@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLang } from '../lib/LangContext';
@@ -134,152 +134,328 @@ const Stats = () => {
   );
 };
 
+const TypewriterMessage = ({ text, onTyping }: { text: string; onTyping?: () => void }) => {
+  const [displayed, setDisplayed] = useState('');
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(text.substring(0, i + 1));
+      i++;
+      if (onTyping) onTyping();
+      if (i >= text.length) {
+        clearInterval(interval);
+      }
+    }, 25);
+    return () => clearInterval(interval);
+  }, [text]);
+  return <span className="whitespace-pre-wrap leading-relaxed inline align-middle">{displayed}</span>;
+};
+
 const DraftForm = () => {
-  const [currentStep, setCurrentStep] = useState(0);
+  const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [inputValue, setInputValue] = useState('');
-  const chatEndRef = useRef<HTMLDivElement>(null);
+  const [isTyping, setIsTyping] = useState(true);
+  const [messages, setMessages] = useState<{text: string, type: 'bot' | 'user', isFinalNode?: boolean, animated?: boolean, time: string}[]>([]);
+  const [hasSent, setHasSent] = useState(false);
+  const [inputError, setInputError] = useState('');
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [currentStep, answers]);
+  const flow = [
+    { key: "nome", question: "Qual seu nome?" },
+    { 
+      key: "whatsapp", 
+      question: "Qual seu WhatsApp com DDD?", 
+      validate: (val: string) => val.replace(/\D/g, '').length >= 10 || "Por favor, insira um número válido com DDD."
+    },
+    { 
+      key: "tipo", 
+      question: "Qual projeto você quer informações?",
+      options: ["Sistemas Web", "Briefing e Branding", "Outros"]
+    },
 
-  const questions = [
-    { key: 'name', question: 'Qual seu nome completo?', placeholder: 'Digite seu nome completo' },
-    { key: 'whatsapp', question: 'Qual seu WhatsApp?', placeholder: '(00) 00000-0000' },
-    { key: 'projectName', question: 'Qual nome do seu projeto? Ex: App de Delivery', placeholder: 'Ex: App de Delivery' },
-    { key: 'budget', question: 'Até quanto deseja gastar nesse projeto? Seu orçamento estimado', placeholder: 'Seu orçamento estimado' },
-    { key: 'layoutIdeas', question: 'Já tem alguma ideia do layout? Cores, referências, estilo...', placeholder: 'Cores, referências, estilo...' },
-    { key: 'details', question: 'Descreva detalhes do projeto.', placeholder: 'Conte-nos um pouco mais sobre sua ideia...' }
+    // WEB
+    { key: "orcamentoWeb", question: "Até quanto deseja gastar nesse projeto?", condition: (a: any) => a.tipo?.toLowerCase().includes("web") },
+    { key: "nomeProjeto", question: "Qual o nome do seu projeto? (ex: App Delivery, SaaS, Gestão de Condomínios)", condition: (a: any) => a.tipo?.toLowerCase().includes("web") },
+
+    // BRANDING
+    { key: "produto", question: "Qual produto quer orçamento? (Camisetas, canecas, banner, adesivos, etc)", condition: (a: any) => !a.tipo?.toLowerCase().includes("web") },
+    { key: "quantidade", question: "Qual a quantidade?", condition: (a: any) => !a.tipo?.toLowerCase().includes("web") },
+    { key: "logo", question: "Já tem logomarca? Se não, descreva sua ideia!", condition: (a: any) => !a.tipo?.toLowerCase().includes("web") },
+    { key: "orcamentoBranding", question: "Até quanto deseja investir?", condition: (a: any) => !a.tipo?.toLowerCase().includes("web") },
+
+    // FINAL
+    { key: "final", question: "Tudo pronto! Clique no botão ao lado para enviar seu briefing pelo WhatsApp.", isFinal: true }
   ];
 
-  const handleNext = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!inputValue.trim()) return;
+  const getNextStep = (currentStep: number, currentAnswers: any) => {
+    let next = currentStep;
+    while (next < flow.length) {
+      if (!flow[next].condition || flow[next].condition(currentAnswers)) {
+        return next;
+      }
+      next++;
+    }
+    return next;
+  };
 
-    if (currentStep < questions.length) {
-      setAnswers(prev => ({ ...prev, [questions[currentStep].key]: inputValue }));
-      setInputValue('');
-      setCurrentStep(prev => prev + 1);
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      setIsTyping(true);
+      const nextStepIndex = getNextStep(0, answers);
+      setTimeout(() => {
+        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        setMessages([{ text: flow[nextStepIndex].question, type: 'bot', animated: true, time }]);
+        setStep(nextStepIndex);
+        setIsTyping(false);
+      }, 1500);
+    }
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping, inputError]);
+
+  const handleNext = (overrideValue?: string) => {
+    const val = (overrideValue ?? inputValue).trim();
+    if (!val || isTyping) return;
+
+    const currentFlowItem = flow[step];
+    
+    if (currentFlowItem.validate) {
+      const result = currentFlowItem.validate(val);
+      if (typeof result === 'string') {
+        setInputError(result);
+        return;
+      }
+    }
+    
+    setInputError('');
+    
+    const updatedAnswers = { ...answers, [currentFlowItem.key]: val };
+    
+    // Mark previous messages as not animated
+    const oldMessages = messages.map(m => ({ ...m, animated: false }));
+    const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    const newMessages = [...oldMessages, { text: val, type: 'user' as const, animated: false, time }];
+    
+    setAnswers(updatedAnswers);
+    setMessages(newMessages);
+    setInputValue('');
+    
+    const nextStepIndex = getNextStep(step + 1, updatedAnswers);
+    
+    if (nextStepIndex < flow.length) {
+      setIsTyping(true);
+      setTimeout(() => {
+        const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        setMessages(prev => [
+          ...prev.map(m => ({...m, animated: false})), 
+          { text: flow[nextStepIndex].question, type: 'bot', isFinalNode: flow[nextStepIndex].isFinal, animated: true, time }
+        ]);
+        setStep(nextStepIndex);
+        setIsTyping(false);
+      }, 1500);
     }
   };
 
   const handleSendWhatsApp = () => {
-    const message = `Olá Sidney! Gostaria de fazer um rascunho de projeto:%0A%0A` +
-      `*Nome:* ${answers.name}%0A` +
-      `*WhatsApp:* ${answers.whatsapp}%0A` +
-      `*Projeto:* ${answers.projectName}%0A` +
-      `*Orçamento:* ${answers.budget}%0A` +
-      `*Ideias de Layout:* ${answers.layoutIdeas}%0A` +
-      `*Detalhes:* ${answers.details}`;
+    if (hasSent) return;
+    let text = "📋 *Novo Rascunho de Projeto*%0A%0A";
     
-    window.open(`https://wa.me/5571984184782?text=${message}`, '_blank');
+    flow.forEach(item => {
+      if (item.key !== 'final' && answers[item.key]) {
+        let label = item.key.charAt(0).toUpperCase() + item.key.slice(1);
+        text += `*${label}:* ${answers[item.key]}%0A`;
+      }
+    });
+
+    window.open(`https://wa.me/5571984184782?text=${text}`, '_blank');
+    
+    setHasSent(true);
+    setIsTyping(true);
+    setTimeout(() => {
+      const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      setMessages(prev => [
+        ...prev.map(m => ({...m, animated: false})), 
+        { text: "Seu rascunho foi enviado com sucesso! Em breve entraremos em contato para alinharmos os detalhes.", type: 'bot', animated: true, time }
+      ]);
+      setIsTyping(false);
+    }, 1500);
   };
+
+  const currentFlowItem = flow[step] || {};
+  const isFinalStep = currentFlowItem.isFinal;
 
   return (
     <section className="py-24 px-6 md:px-24 max-w-4xl mx-auto relative z-10">
       <div className="text-center mb-12">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#fbbf24] tracking-tight mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] transition-colors duration-500 whitespace-nowrap overflow-hidden text-ellipsis px-2">
-          Vamos fazer um rascunho do seu projeto?
-        </h2>
-        <div className="w-24 h-1 bg-[#fbbf24] mx-auto rounded-full opacity-50 transition-colors duration-500"></div>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+          <div className="relative group cursor-pointer">
+            <div className="absolute -inset-2 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <img 
+              src="/favicon.png" 
+              alt="IA Icon" 
+              className="w-5 h-5 md:w-6 md:h-6 object-contain relative transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" 
+            />
+          </div>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#fbbf24] tracking-tight mb-4 md:mb-0 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)] transition-colors duration-500 whitespace-nowrap overflow-hidden text-ellipsis px-2">
+            Vamos fazer um rascunho do seu projeto?
+          </h2>
+        </div>
+        <div className="w-24 h-1 bg-[#fbbf24] mx-auto rounded-full opacity-50 transition-colors duration-500 mt-4"></div>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-xl p-6 md:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl max-w-2xl mx-auto min-h-[400px] flex flex-col justify-between">
-        <div className="space-y-6 overflow-y-auto max-h-[500px] pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
-          
-          {/* Historical answers */}
-          {questions.slice(0, currentStep).map((q, idx) => (
-            <div key={`history-${idx}`} className="space-y-4">
-              <div className="flex justify-start">
-                <div className="bg-slate-800/80 text-white px-5 py-3 rounded-2xl rounded-tl-sm border border-slate-700 max-w-[85%] inline-block">
-                  <p className="text-sm font-normal text-white">{q.question}</p>
-                </div>
-              </div>
-              <div className="flex justify-end">
-                <div className="bg-[#fbbf24]/20 backdrop-blur-md border border-[#fbbf24]/30 text-[#fbbf24] px-5 py-3 rounded-2xl rounded-tr-sm max-w-[85%] inline-block">
-                  <p className="text-sm font-normal">{answers[q.key]}</p>
-                </div>
+      <div id="chat" className="w-full max-w-[700px] mx-auto bg-slate-200 p-[20px] rounded-[15px] border border-white/10 shadow-2xl flex flex-col relative overflow-hidden">
+        
+        {/* Messages List Area */}
+        <div id="messages" ref={messagesContainerRef} className="flex-1 h-[450px] overflow-y-auto space-y-2 pb-4 scrollbar-hide [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {messages.map((msg, idx) => (
+            <div key={idx} className={`flex flex-col ${msg.type === 'user' ? 'items-end' : 'items-start'}`}>
+              <div className={`px-[15px] pt-[8px] pb-[16px] my-[4px] rounded-[12px] max-w-[80%] text-sm font-medium shadow-md relative ${
+                msg.type === 'user' 
+                  ? 'bg-[#dcf8c6] text-black ml-auto rounded-tr-sm' 
+                  : 'bg-white text-black text-left rounded-tl-sm'
+              }`}>
+                {msg.animated ? (
+                  <TypewriterMessage text={msg.text} onTyping={scrollToBottom} />
+                ) : (
+                  <span className="whitespace-pre-wrap leading-relaxed inline align-middle">{msg.text}</span>
+                )}
+                <span className="absolute bottom-[2px] right-[8px] text-[10px] text-gray-500 font-normal flex items-center gap-0.5">
+                  {msg.time}
+                  {msg.type === 'user' && (
+                    <svg className="w-3 h-3 text-[#53bdeb]" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.3 5.3a1 1 0 0 1 1.4 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4l3.3 3.3 7.3-7.3zM22.3 5.3a1 1 0 0 1 1.4 1.4l-8 8a1 1 0 0 1-1.4 0l-2-2a1 1 0 1 1 1.4-1.4l1.3 1.3 7.3-7.3z"/>
+                    </svg>
+                  )}
+                </span>
+                
+                {msg.isFinalNode && !hasSent && (
+                  <span className="inline-block ml-2 align-middle">
+                    <button 
+                      onClick={handleSendWhatsApp}
+                      className="w-8 h-8 md:w-9 md:h-9 bg-[#25D366] hover:bg-[#1da851] text-white rounded-full transition-all hover:scale-110 active:scale-95 shadow-lg shadow-[#25D366]/20 flex items-center justify-center flex-shrink-0"
+                      title="Enviar pelo WhatsApp"
+                    >
+                      <svg className="w-4 h-4 md:w-5 md:h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+                    </button>
+                  </span>
+                )}
               </div>
             </div>
           ))}
 
-          {/* Current question */}
-          {currentStep < questions.length && (
+          {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-slate-800/80 text-white px-5 py-3 rounded-2xl rounded-tl-sm border border-slate-700 max-w-[85%] inline-block">
-                <p className="text-sm font-normal text-white/90">
-                  <TypewriterText key={`question-${currentStep}`} text={questions[currentStep].question} delay={0} />
-                </p>
+              <div className="bg-white px-[15px] py-[10px] my-[8px] rounded-[12px] rounded-tl-sm max-w-[80%] shadow-md">
+                <span id="typing" className="flex items-center gap-2 h-4 text-gray-500 font-normal italic text-xs">
+                  O assistente está digitando...
+                </span>
               </div>
             </div>
           )}
-
-          {/* End of flow / WhatsApp Button */}
-          {currentStep === questions.length && (
-            <div className="flex justify-start">
-              <div className="bg-slate-800/80 text-white px-5 py-5 rounded-2xl rounded-tl-sm border border-slate-700 max-w-[85%] inline-block">
-                <div className="flex items-center gap-3">
-                  <p className="text-sm font-normal text-white/90">
-                    Tudo pronto! Seu rascunho está completo, clique no ícone ao lado para me enviar o pelo WhatsApp.
-                  </p>
-                  <motion.button 
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 2.5 }}
-                    onClick={handleSendWhatsApp}
-                    className="w-8 h-8 bg-[#25D366] hover:bg-[#1da851] text-white rounded-full transition-all hover:scale-[1.1] active:scale-95 shadow-lg shadow-[#25D366]/20 flex items-center justify-center flex-shrink-0"
-                  >
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
-                  </motion.button>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={chatEndRef} />
         </div>
 
-        {/* Input area */}
-        {currentStep < questions.length && (
-          <form onSubmit={handleNext} className="mt-8 flex gap-3 pt-4 border-t border-white/5">
-            {questions[currentStep].key === 'details' ? (
-              <textarea
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                placeholder={questions[currentStep].placeholder}
-                className="flex-1 bg-slate-900/60 border border-white/10 rounded-2xl px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-500 resize-none"
-                rows={2}
-                autoFocus
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    handleNext(e as any);
-                  }
-                }}
-              />
-            ) : (
-              <input
-                type={questions[currentStep].key === 'whatsapp' ? 'tel' : 'text'}
-                value={inputValue}
-                onChange={e => setInputValue(e.target.value)}
-                placeholder={questions[currentStep].placeholder}
-                className="flex-1 bg-slate-900/60 border border-white/10 rounded-full px-6 py-4 text-white focus:outline-none focus:border-[#fbbf24]/50 transition-all placeholder:text-slate-500"
-                autoFocus
-              />
+        {/* Text Input Area & Options */}
+        {!isFinalStep && (
+          <div className="mt-2 flex flex-col gap-3 relative z-10 w-full shrink-0">
+            {/* Options Chips */}
+            {currentFlowItem.options && !isTyping && (
+              <div className="flex flex-wrap gap-2 justify-end mb-2">
+                {currentFlowItem.options.map((opt: string) => (
+                  <button
+                    key={opt}
+                    onClick={() => handleNext(opt)}
+                    className="px-4 py-1.5 rounded-full bg-white border-2 border-[#25D366] text-[#005c4b] text-sm font-bold shadow-sm hover:bg-[#dcf8c6] transition-all"
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
             )}
-            <button
-              type="submit"
-              disabled={!inputValue.trim()}
-              className="w-12 h-12 rounded-full bg-[#fbbf24] hover:bg-[#f59e0b] flex items-center justify-center text-slate-950 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 self-end"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </button>
-          </form>
+            
+            {inputError && (
+              <div className="text-red-500 font-medium text-xs px-2 text-right animate-pulse">{inputError}</div>
+            )}
+
+            <form onSubmit={(e) => { e.preventDefault(); handleNext(); }} className="flex gap-2">
+              <input
+                type={currentFlowItem.key === 'whatsapp' ? 'tel' : 'text'}
+                value={inputValue}
+                onChange={e => {
+                  if (currentFlowItem.key === 'whatsapp') {
+                    setInputValue(e.target.value.replace(/[^0-9()\s+-]/g, ''));
+                  } else {
+                    setInputValue(e.target.value);
+                  }
+                  setInputError('');
+                }}
+                placeholder="Digite sua resposta..."
+                disabled={isTyping}
+                className="flex-1 bg-white border border-gray-300 shadow-sm rounded-full px-5 py-3 text-black text-sm focus:outline-none focus:border-[#25D366] placeholder:text-gray-400 transition-all disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={!inputValue.trim() || isTyping}
+                className="w-11 h-11 rounded-full bg-[#25D366] hover:bg-[#1da851] flex items-center justify-center text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed flex-shrink-0 shadow-md"
+              >
+                <svg className="w-5 h-5 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </button>
+            </form>
+          </div>
         )}
       </div>
     </section>
+  );
+};
+
+const ScrollToTopButton = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      // Show button when page is scrolled down
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+    window.addEventListener("scroll", toggleVisibility);
+    return () => window.removeEventListener("scroll", toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
+
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.button
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+          onClick={scrollToTop}
+          className="fixed bottom-24 right-5 w-11 h-11 rounded-full bg-slate-800 text-white shadow-xl hover:bg-slate-700 hover:scale-110 active:scale-95 transition-all z-50 flex items-center justify-center border-2 border-white/10"
+          aria-label="Voltar ao topo"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+        </motion.button>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -320,6 +496,10 @@ export const Home: React.FC = () => {
       type: 'video'
     }
   ];
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -380,13 +560,13 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-col xl:flex-row items-center xl:items-baseline gap-x-2 mb-4 text-center xl:text-left"
+          className="flex flex-col xl:flex-row items-start xl:items-baseline gap-x-2 mb-4 text-left w-full"
         >
           <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
             {t.brand}
           </h2>
           <div className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
-             <TypewriterText text=", e ai vamos codar?" delay={1} />
+             <TypewriterText text=" e ai! vamos codar?" delay={1} />
           </div>
         </motion.div>
 
@@ -510,6 +690,7 @@ export const Home: React.FC = () => {
       {/* ===== DRAFT FORM SECTION ===== */}
       <DraftForm />
       
+      <ScrollToTopButton />
       <div className="pb-24"></div>
     </div>
   );

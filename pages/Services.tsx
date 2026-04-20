@@ -369,9 +369,10 @@ export const Services: React.FC = () => {
         <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-primary-500/10 border border-primary-500/20 text-[10px] font-black uppercase tracking-widest text-primary-500 mb-4">
           CidVisual Studio
         </div>
-        <h1 className="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter uppercase font-display leading-none">
-          Soluções em <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-emerald-400 italic">Engenharia 360°</span>
+        <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase font-display leading-none">
+          <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">
+            Soluções em <br /> Engenharia 360°
+          </span>
         </h1>
         <div className="max-w-3xl mx-auto">
           <p className="text-lg text-slate-500 dark:text-slate-400 font-medium leading-relaxed">

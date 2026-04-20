@@ -115,8 +115,10 @@ export const OnlineGenerators: React.FC = () => {
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-500/5 border border-primary-500/10 text-[8px] font-black uppercase tracking-widest text-primary-500">
           cidengenharia Intelligence System
         </div>
-        <h1 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter">
-          Engenharia de Produção <span className="text-primary-500 italic">Documental</span>
+        <h1 className="text-2xl md:text-3xl font-black uppercase font-display tracking-tighter">
+          <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">
+            Engenharia de Produção Documental
+          </span>
         </h1>
       </section>
 

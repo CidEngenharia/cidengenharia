@@ -13,7 +13,7 @@ const ClientLogo: React.FC<{ name: string; industry: string; icon: string; logoU
          <img 
            src={logoUrl} 
            alt={`Logo ${name}`} 
-           className="w-full h-full object-contain p-6 filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"
+           className="w-full h-full object-contain p-6 filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-125"
            onError={(e) => {
              (e.target as HTMLImageElement).src = "https://placehold.co/200x200?text=LOGO";
            }}
@@ -45,10 +45,18 @@ const FALLBACK_TESTIMONIALS: Testimonial[] = [
   { id: '2', name: 'Ana Souza', role: 'Gerente TriHair', text: 'Excelente suporte e ferramentas de automação documental incríveis.', created_at: new Date().toISOString() }
 ];
 
-const FALLBACK_CLIENTS = [
-  { name: "CMTur", industry: "Turismo & Viagens", icon: "explore", logoUrl: "https://images.unsplash.com/photo-1599305090598-fe179d501227?w=200&h=200&fit=crop&q=80" },
-  { name: "Águia Transportes", industry: "Logística & Cargas", icon: "local_shipping", logoUrl: "https://images.unsplash.com/photo-1543286386-713bdd548da4?w=200&h=200&fit=crop&q=80" },
-  { name: "TriHair Industria", industry: "Cosméticos & Indústria", icon: "precision_manufacturing", logoUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop&q=80" }
+const CLIENTS = [
+  { name: "TriHair", industry: "Cosméticos & Indústria", icon: "precision_manufacturing", logoUrl: "/trihair.jpg" },
+  { name: "CMTur", industry: "Turismo & Viagens", icon: "explore", logoUrl: "/cmturismo.fw.png" },
+  { name: "Point dos Amigos", industry: "Bar & Restaurante", icon: "sports_bar", logoUrl: "/point_dosamigos.fw.png" },
+  { name: "Keu Barber", industry: "Barbearia", icon: "content_cut", logoUrl: "/Keu_barber.fw.png" },
+  { name: "JP Soldas", industry: "Serviços de Solda", icon: "hardware", logoUrl: "/jp_soldas.fw.png" },
+  { name: "Open Bar", industry: "Bar & Distribuidora", icon: "local_bar", logoUrl: "/open_bar.fw.png" },
+  { name: "N&G Modas", industry: "Vestuário", icon: "checkroom", logoUrl: "/neg modas.fw.png" },
+  { name: "Deposito Fileira", industry: "Materiais de Construção", icon: "construction", logoUrl: "/Deposito_.fw.png" },
+  { name: "i9Celulares", industry: "Tecnologia & Eletrônicos", icon: "smartphone", logoUrl: "/i9Celular.fw.png" },
+  { name: "Joiciane Cakes", industry: "Confeitaria", icon: "cake", logoUrl: "/joice.jpeg" },
+  { name: "Salão Mary", industry: "Salão de Beleza", icon: "content_cut", logoUrl: "/mary.fw.png" }
 ];
 
 export const Customers: React.FC = () => {
@@ -60,7 +68,6 @@ export const Customers: React.FC = () => {
   
   const [formData, setFormData] = useState({ name: '', role: '', text: '' });
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [clients, setClients] = useState<any[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -71,24 +78,9 @@ export const Customers: React.FC = () => {
     try {
       const { data: tData } = await supabase.from('testimonials').select('*').order('created_at', { ascending: false });
       setTestimonials(tData && tData.length > 0 ? tData : FALLBACK_TESTIMONIALS);
-
-      const { data: cData } = await supabase.from('clients').select('*').order('created_at', { ascending: false });
-      
-      // Mapeia os dados do Supabase ou usa o Fallback caso o banco esteja vazio
-      if (cData && cData.length > 0) {
-        setClients(cData.map(c => ({ 
-          name: c.name, 
-          industry: c.industry, 
-          icon: 'business', 
-          logoUrl: c.logo_url 
-        })));
-      } else {
-        setClients(FALLBACK_CLIENTS);
-      }
     } catch (err) {
       console.error('Erro ao buscar dados:', err);
       setTestimonials(FALLBACK_TESTIMONIALS);
-      setClients(FALLBACK_CLIENTS);
     } finally {
       setIsLoading(false);
     }
@@ -144,15 +136,15 @@ export const Customers: React.FC = () => {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-slate-800 text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
           Portfolio de Marcas
         </div>
-        <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter leading-none">
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-500 dark:from-white dark:to-slate-500">Parceiros de</span> <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 to-violet-400 italic">Negócio</span>
+        <h1 className="text-3xl md:text-5xl font-black uppercase font-display tracking-tighter leading-none">
+          <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">Parceiros de Negócio</span>
         </h1>
         <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xl mx-auto">Empresas que confiam na CidEngenharia para suas soluções de identidade e tecnologia.</p>
       </header>
 
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-40">
         <AnimatePresence mode="popLayout">
-          {clients.map((client, idx) => (
+          {CLIENTS.map((client, idx) => (
             <motion.div 
               key={`${client.name}-${idx}`} 
               initial={{ opacity: 0, y: 30 }} 

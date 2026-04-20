@@ -55,7 +55,7 @@ const ProjectCard = ({ image, title, type, desc, techs, status, statusLabel, lin
           </div>
           <span className="text-xs font-black text-slate-900 dark:text-white tracking-tighter">{status}%</span>
         </div>
-        <div className="h-3 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden p-[1px]">
+        <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
           <motion.div 
             initial={{ width: 0 }}
             whileInView={{ width: `${status}%` }}
@@ -123,9 +123,21 @@ export const Portfolio: React.FC = () => {
       {/* Header Section */}
       <header className="max-w-6xl mx-auto px-8 pt-36 md:pt-48 pb-16 flex flex-col items-center text-center space-y-4">
         <div className="space-y-4">
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tight leading-none">
-            Portfólio de <span className="text-primary-500 italic">Sistemas Web</span>
-          </h1>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+            <div className="relative group cursor-pointer">
+              <div className="absolute -inset-2 bg-gradient-to-r from-violet-600/20 to-indigo-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <img 
+                src="/favicon.png" 
+                alt="IA Icon" 
+                className="w-6 h-6 md:w-8 md:h-8 object-contain relative transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" 
+              />
+            </div>
+            <h1 className="text-3xl md:text-5xl font-black uppercase font-display tracking-tight leading-none">
+              <span className="text-transparent bg-clip-text bg-[linear-gradient(to_right,#1e293b,#9ca3af,#a855f7,#22c55e)] dark:bg-[linear-gradient(to_right,#ffffff,#9ca3af,#a855f7,#22c55e)]">
+                Portfólio de Sistemas Web
+              </span>
+            </h1>
+          </div>
           <p className="text-slate-500 dark:text-slate-400 text-[10px] md:text-xs max-w-2xl mx-auto font-black uppercase tracking-[0.4em]">
             Engenharia de precisão e interfaces de alto impacto
           </p>
