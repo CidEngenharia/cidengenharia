@@ -29,6 +29,8 @@ import { AdminPricing } from './pages/AdminPricing';
 import { AdminFinance } from './pages/AdminFinance';
 import { AdminClients } from './pages/AdminClients';
 import { AdminBrandKit } from './pages/AdminBrandKit';
+import { ApostilaForm } from './pages/ApostilaForm';
+import SalesPage from './pages/SalesPage';
 import { ThemeToggle } from './components/ThemeToggle';
 
 const FlagBR = () => (
@@ -133,6 +135,8 @@ const App: React.FC = () => {
     location.pathname === '/generators/resume' ||
     location.pathname === '/generators/qrcode' ||
     location.pathname === '/condosmart' ||
+    location.pathname === '/free-guide' ||
+    location.pathname === '/terminal-hacker-pro' ||
     location.pathname.startsWith('/admin/');
 
   const showSidebar = !isAdminPage && !isSpecialPage;
@@ -288,6 +292,9 @@ const App: React.FC = () => {
             <Route path="/admin/finance" element={<PageWrapper><AdminFinance /></PageWrapper>} />
             <Route path="/admin/clients" element={<PageWrapper><AdminClients /></PageWrapper>} />
             <Route path="/admin/brand-kit" element={<PageWrapper><AdminBrandKit /></PageWrapper>} />
+            
+            <Route path="/free-guide" element={<PageWrapper><ApostilaForm /></PageWrapper>} />
+            <Route path="/terminal-hacker-pro" element={<PageWrapper><SalesPage /></PageWrapper>} />
           </Routes>
         </AnimatePresence>
 

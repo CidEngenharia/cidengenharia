@@ -542,7 +542,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* ===== HERO SECTION ===== */}
-      <section className="flex flex-col items-center lg:items-start justify-center px-6 md:px-24 py-20 md:py-32 min-h-[85vh] max-w-7xl mx-auto relative z-10">
+      <section className="flex flex-col items-start justify-center px-6 md:px-24 py-20 md:py-32 min-h-[85vh] max-w-7xl mx-auto relative z-10">
 
         {/* Badge */}
         <motion.div
@@ -562,10 +562,10 @@ export const Home: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="flex flex-col xl:flex-row items-start xl:items-baseline gap-x-2 mb-4 text-left w-full"
         >
-          <h2 className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
+          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-5xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
             {t.brand}
           </h2>
-          <div className="text-5xl sm:text-6xl md:text-7xl lg:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
+          <div className="text-4xl sm:text-6xl md:text-7xl lg:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
              <TypewriterText text=" e ai! vamos codar?" delay={1} />
           </div>
         </motion.div>
@@ -577,7 +577,7 @@ export const Home: React.FC = () => {
           transition={{ delay: 0.3 }}
           className="mb-8"
         >
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tight text-left">
             <span className="text-[#fbbf24] drop-shadow-[0_0_30px_rgba(251,191,36,0.4)]">
               {t.heroTitle}
             </span>
@@ -589,7 +589,7 @@ export const Home: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-bold leading-relaxed mb-10"
+          className="text-base md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl font-bold leading-relaxed mb-10 text-left"
         >
           {t.heroDesc}
         </motion.p>
@@ -603,7 +603,7 @@ export const Home: React.FC = () => {
         >
           <Link
             to="/services"
-            className="px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white font-black rounded-xl shadow-lg shadow-violet-600/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px]"
+            className="px-8 py-4 bg-violet-900 hover:bg-violet-800 text-white font-black rounded-xl shadow-lg shadow-violet-900/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px]"
           >
             {t.ctaSolutions}
           </Link>
@@ -612,6 +612,12 @@ export const Home: React.FC = () => {
             className="px-8 py-4 bg-slate-200/50 dark:bg-white/5 hover:bg-slate-200/80 dark:hover:bg-white/10 border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white font-black rounded-xl transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px] backdrop-blur-sm"
           >
             {t.ctaPortfolio}
+          </Link>
+          <Link
+            to="/free-guide"
+            className="px-8 py-4 bg-[#006241] hover:bg-[#004a31] text-white font-black rounded-xl shadow-lg shadow-[#006241]/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-[11px]"
+          >
+            Apostila Grátis
           </Link>
         </motion.div>
       </section>
