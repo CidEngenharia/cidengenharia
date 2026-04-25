@@ -5,26 +5,26 @@ import { supabase } from '../lib/supabase';
 
 const ClientLogo: React.FC<{ name: string; industry: string; icon: string; logoUrl?: string }> = ({ name, industry, icon, logoUrl }) => (
   <motion.div 
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="bg-white dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex flex-col items-center text-center gap-6 group h-full transition-all duration-500 hover:border-primary-500/20"
+    whileHover={{ y: -5, scale: 1.05 }}
+    className="bg-white dark:bg-slate-900 p-4 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-md flex items-center gap-4 group transition-all duration-500 hover:border-primary-500/20"
   >
-    <div className="w-full aspect-square rounded-[2rem] bg-slate-50 dark:bg-slate-950/50 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:bg-primary-500/5">
+    <div className="w-16 h-16 min-w-[64px] rounded-2xl bg-slate-50 dark:bg-slate-950/50 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:bg-primary-500/5">
        {logoUrl ? (
          <img 
            src={logoUrl} 
            alt={`Logo ${name}`} 
-           className="w-full h-full object-contain p-6 filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-125"
+           className="w-full h-full object-contain p-3 filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"
            onError={(e) => {
              (e.target as HTMLImageElement).src = "https://placehold.co/200x200?text=LOGO";
            }}
          />
        ) : (
-         <span className="material-icons-outlined text-5xl text-slate-300 group-hover:text-primary-500 transition-colors">{icon}</span>
+         <span className="material-icons-outlined text-2xl text-slate-300 group-hover:text-primary-500 transition-colors">{icon}</span>
        )}
     </div>
-    <div className="space-y-1 w-full overflow-hidden px-1">
-      <h3 className="text-[13px] font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-tight truncate">{name}</h3>
-      <p className="text-[9px] font-normal text-slate-400 uppercase tracking-[0.2em] leading-relaxed line-clamp-2 min-h-[2.5em] flex items-center justify-center">
+    <div className="flex flex-col gap-0.5 overflow-hidden text-left">
+      <h3 className="text-[11px] font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-tight truncate">{name}</h3>
+      <p className="text-[8px] font-normal text-slate-400 uppercase tracking-[0.1em] leading-tight line-clamp-1">
         {industry}
       </p>
     </div>
@@ -50,7 +50,7 @@ const CLIENTS = [
   { name: "CMTur", industry: "Turismo & Viagens", icon: "explore", logoUrl: "/cmturismo.fw.png" },
   { name: "Point dos Amigos", industry: "Bar & Restaurante", icon: "sports_bar", logoUrl: "/point_dosamigos.fw.png" },
   { name: "Keu Barber", industry: "Barbearia", icon: "content_cut", logoUrl: "/Keu_barber.fw.png" },
-  { name: "JP Soldas", industry: "Serviços de Solda", icon: "hardware", logoUrl: "/jp_soldas.fw.png" },
+  { name: "JP Soldas", industry: "Serviços de Solda", icon: "hardware", logoUrl: "/jp_soldas.fw.jpeg" },
   { name: "Open Bar", industry: "Bar & Distribuidora", icon: "local_bar", logoUrl: "/open_bar.fw.png" },
   { name: "N&G Modas", industry: "Vestuário", icon: "checkroom", logoUrl: "/neg modas.fw.png" },
   { name: "Deposito Fileira", industry: "Materiais de Construção", icon: "construction", logoUrl: "/Deposito_.fw.png" },

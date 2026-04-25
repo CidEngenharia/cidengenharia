@@ -93,8 +93,8 @@ export default function SalesPage() {
             A revolução do seu workflow
           </span>
           
-          <h1 className="text-3xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter leading-none text-yellow-500 drop-shadow-[0_0_50px_rgba(234,179,8,0.2)]">
-            Terminal <br className="md:hidden" /> Hacker Pro
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-8 tracking-tighter leading-none text-yellow-500 drop-shadow-[0_0_50px_rgba(234,179,8,0.2)]">
+            Terminal Hacker Pro
           </h1>
           
           <div className="mt-4 mb-10">
@@ -104,12 +104,12 @@ export default function SalesPage() {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
+          <div className="flex flex-row items-center justify-center gap-3 md:gap-4 px-2">
             <motion.button 
               onClick={() => document.getElementById('offer')?.scrollIntoView({ behavior: 'smooth' })}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-yellow-500 hover:bg-yellow-400 text-black font-black px-10 py-4 rounded-2xl shadow-[0_20px_40px_rgba(234,179,8,0.2)] transition-all uppercase tracking-widest text-[10px]"
+              className="flex-1 md:flex-none bg-yellow-500 hover:bg-yellow-400 text-black font-black px-4 md:px-10 py-4 rounded-2xl shadow-[0_20px_40px_rgba(234,179,8,0.2)] transition-all uppercase tracking-widest text-[9px] md:text-[10px] whitespace-nowrap"
             >
               Quero aprender agora
             </motion.button>
@@ -119,7 +119,7 @@ export default function SalesPage() {
               download="Dev Hacker - Apostila.pdf"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#A855F7] hover:bg-[#9333EA] text-white font-black px-10 py-4 rounded-2xl shadow-[0_20px_40px_rgba(168,85,247,0.2)] transition-all uppercase tracking-widest text-[10px] inline-flex items-center justify-center cursor-pointer"
+              className="flex-1 md:flex-none bg-[#A855F7] hover:bg-[#9333EA] text-white font-black px-4 md:px-10 py-4 rounded-2xl shadow-[0_20px_40px_rgba(168,85,247,0.2)] transition-all uppercase tracking-widest text-[9px] md:text-[10px] inline-flex items-center justify-center cursor-pointer whitespace-nowrap"
             >
               Baixar Apostila
             </motion.a>
@@ -168,7 +168,7 @@ export default function SalesPage() {
             <p className="text-white/40 text-base">O Terminal Hacker Pro te ensina na prática o que a faculdade ignora.</p>
           </div>
 
-          <div className="grid md:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { title: "Dominar comandos essenciais", desc: "A base de tudo, do LS ao RM -RF com segurança.", icon: "terminal" },
               { title: "Criar projetos Node.js do zero", desc: "Configure ambientes profissionais em segundos.", icon: "code" },
@@ -178,15 +178,20 @@ export default function SalesPage() {
             ].map((item, i) => (
               <motion.div 
                 key={i}
-                whileHover={{ x: 10, backgroundColor: 'rgba(255,255,255,0.08)' }}
-                className="flex items-center gap-6 p-5 bg-white/5 border border-white/10 rounded-2xl transition-all cursor-default group"
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -5,
+                  backgroundColor: 'rgba(255,255,255,0.08)',
+                  borderColor: 'rgba(234,179,8,0.3)'
+                }}
+                className="flex items-center gap-4 p-5 bg-white/5 border border-white/10 rounded-3xl transition-all duration-300 cursor-default group h-full"
               >
-                <div className="w-10 h-10 bg-yellow-500/10 rounded-xl flex items-center justify-center text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition-all">
-                  <span className="material-icons-outlined text-lg">{item.icon}</span>
+                <div className="w-10 h-10 min-w-[40px] bg-yellow-500/10 rounded-2xl flex items-center justify-center text-yellow-500 group-hover:bg-yellow-500 group-hover:text-black transition-all duration-500">
+                  <span className="material-icons-outlined text-base">{item.icon}</span>
                 </div>
-                <div>
-                  <h4 className="font-black text-[10px] uppercase tracking-widest text-white mb-1">{item.title}</h4>
-                  <p className="text-[9px] text-white/40 uppercase tracking-wider">{item.desc}</p>
+                <div className="flex flex-col gap-1">
+                  <h4 className="font-black text-[10px] uppercase tracking-widest text-white leading-tight">{item.title}</h4>
+                  <p className="text-[9px] text-white/40 uppercase tracking-wider leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
