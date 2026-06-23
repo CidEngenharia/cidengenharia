@@ -46,7 +46,8 @@ export const VirtualEngineer: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY || localStorage.getItem('VITE_GEMINI_API_KEY') || '';
+      const ai = new GoogleGenAI({ apiKey });
       const prompt = `Você é o Engenheiro Virtual do Studio CidEngenharia 360°.
       Aja como a consciência digital de Sidney Sales. Sua fala é precisa, visionária e tecnológica.
       Especialidades: NFC (DyCard), Banners, Lonas, IA Generativa, Branding e Engenharia Visual.
@@ -55,7 +56,7 @@ export const VirtualEngineer: React.FC = () => {
       Mensagem do Cliente: ${userMsg}`;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-2.5-flash',
         contents: prompt,
       });
 
@@ -197,7 +198,7 @@ export const VirtualEngineer: React.FC = () => {
 
               <form onSubmit={handleSend} className="p-8 bg-slate-950 border-t border-slate-800">
                  <div className="relative group">
-                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-primary-500 font-black text-lg transition-transform group-focus-within:translate-x-1">></span>
+                    <span className="absolute left-6 top-1/2 -translate-y-1/2 text-primary-500 font-black text-lg transition-transform group-focus-within:translate-x-1">&gt;</span>
                     <input 
                       type="text" 
                       value={input}
