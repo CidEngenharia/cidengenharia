@@ -1,9 +1,11 @@
 import React, { createContext, useContext } from 'react';
 import { Lang, translations } from './i18n';
 
+export type TranslationType = (typeof translations)[Lang];
+
 interface LangContextType {
   lang: Lang;
-  t: typeof translations['PT'];
+  t: TranslationType;
 }
 
 export const LangContext = createContext<LangContextType>({

@@ -2,7 +2,7 @@ export type Lang = 'PT' | 'EN' | 'ES';
 
 export const translations = {
   PT: {
-    badge: 'Plataforma completa de engenharia e IA',
+    badge: 'Plataforma completa de Desenvolvimento e IA',
     brand: 'Olá!',
     heroTitle: 'Fábrica Dev',
     heroDesc: 'Criamos sistemas Web utilizando o ouro da IA para transformar seu negócio em soluções digitais premium — identidade visual, sistemas inteligentes e engenharia de ponta.',
@@ -17,6 +17,17 @@ export const translations = {
       'Visualização complexa e dashboards estratégicos para tomada de decisão baseada em métricas de alta fidelidade.',
       'Espaço físico e digital dedicado à manufatura técnica de peças em fibra, metal e soluções em comunicação visual premium.',
       'Briefing: O mergulho na sua visão. Branding: A construção da sua essência. Juntos, definem o DNA do seu sucesso digital.',
+    ],
+    landingBadge: 'Portal de Serviços',
+    landingTitlePrefix: 'Hub de',
+    landingTitleAccent: 'Serviços',
+    landingSubtitle: 'Escolha o serviço que você precisa',
+    accessLabel: 'Acessar',
+    portalNames: ['CidVisual', 'CidDesenvolvimento', 'CidManutenção'],
+    portalServices: [
+      ['Gráfica', 'Cópia P&B e Colorida / Análise', 'Xerox', 'Produtos Personalizados', 'Canecas · Camisetas', 'Porta-Retratos · Garrafas Squize', 'Banner · Faixa · Cavalete', 'Adesivos Vinil', 'Plotagem'],
+      ['Criação de Sites', 'Aluguel de sites', 'Criação de Landepages', 'Criação e Edição Videos', 'Prompts em IA', 'Desenvolvimento de Sistemas Web', 'Criação e Edição de Imagens'],
+      ['Manutenção em PCs', 'Hardware e Software', 'Cópias de Chaves', 'Soldagem metálicas', 'Móveis em pallet', 'Peças em Resinas', 'Recuperação de peças fibra de vidro'],
     ],
   },
   EN: {
@@ -36,6 +47,17 @@ export const translations = {
       'Physical and digital space dedicated to technical manufacturing of fiber, metal parts and premium visual communication solutions.',
       'Briefing: Diving into your vision. Branding: Building your essence. Together, they define the DNA of your digital success.',
     ],
+    landingBadge: 'Services Portal',
+    landingTitlePrefix: 'Services',
+    landingTitleAccent: 'Hub',
+    landingSubtitle: 'Choose the service you need',
+    accessLabel: 'Open',
+    portalNames: ['CidVisual', 'CidDevelopment', 'CidMaintenance'],
+    portalServices: [
+      ['Print shop', 'B&W and color copies / Analysis', 'Photocopies', 'Custom products', 'Mugs · T-shirts', 'Frames · Squeeze bottles', 'Banners · Signs · Stands', 'Vinyl stickers', 'Plotting'],
+      ['Website creation', 'Website rental', 'Landing page creation', 'Video creation and editing', 'AI prompts', 'Web systems development', 'Image creation and editing'],
+      ['PC maintenance', 'Hardware and software', 'Key copies', 'Metal welding', 'Pallet furniture', 'Resin parts', 'Fiberglass part restoration'],
+    ],
   },
   ES: {
     badge: 'Plataforma completa de ingeniería e IA',
@@ -53,6 +75,17 @@ export const translations = {
       'Visualización compleja y dashboards estratégicos para la toma de decisiones basada em métricas de alta fidelidad.',
       'Espacio físico y digital dedicado a la manufactura técnica de piezas en fibra, metal y soluciones en comunicación visual premium.',
       'Briefing: La inmersión en tu visión. Branding: La construcción de tu esencia. Juntos, definen el ADN de tu éxito digital.',
+    ],
+    landingBadge: 'Portal de Servicios',
+    landingTitlePrefix: 'Hub de',
+    landingTitleAccent: 'Servicios',
+    landingSubtitle: 'Elige el servicio que necesitas',
+    accessLabel: 'Acceder',
+    portalNames: ['CidVisual', 'CidDesarrollo', 'CidMantenimiento'],
+    portalServices: [
+      ['Imprenta', 'Copias B/N y color / Análisis', 'Fotocopias', 'Productos personalizados', 'Tazas · Camisetas', 'Portarretratos · Botellas', 'Banners · Lonas · Caballetes', 'Adhesivos de vinilo', 'Ploteo'],
+      ['Creación de sitios web', 'Alquiler de sitios web', 'Creación de landing pages', 'Creación y edición de videos', 'Prompts de IA', 'Desarrollo de sistemas web', 'Creación y edición de imágenes'],
+      ['Mantenimiento de PCs', 'Hardware y software', 'Copias de llaves', 'Soldadura metálica', 'Muebles en pallet', 'Piezas en resina', 'Restauración de piezas de fibra de vidrio'],
     ],
   },
 } as const;

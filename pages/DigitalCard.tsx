@@ -14,28 +14,34 @@ const ProductCard: React.FC<{
   btnLabel?: string;
   btnIcon?: string;
 }> = ({ title, price, desc, icon, type, features, color, btnColor, btnLabel = "Gerar Agora", btnIcon = "rocket_launch" }) => (
-  <div className="relative group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-8 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full overflow-hidden">
-    <div className={`absolute -top-10 -right-10 w-32 h-32 ${color} opacity-10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700`}></div>
-    
-    <div className="relative z-10 flex flex-col h-full">
-      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg shadow-secondary/20 ${color}`}>
-        <span className="material-icons-outlined text-3xl">{icon}</span>
+  <div className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col h-full overflow-hidden">
+    <div className="relative overflow-hidden bg-[linear-gradient(135deg,#c4b5fd,#a78bfa,#8b5cf6)] px-6 py-7 text-slate-950">
+      <div className="absolute inset-0 engineering-grid opacity-10"></div>
+      <div className="relative flex items-center gap-4">
+        <div className="w-12 h-12 rounded-xl border border-slate-950/10 bg-white/20 flex items-center justify-center shadow-sm">
+          <span className="material-icons-outlined text-2xl">{icon}</span>
+        </div>
+        <div>
+          <div className="text-[10px] uppercase font-black tracking-[0.28em] text-slate-950/55 mb-1">Produto</div>
+          <h3 className="text-lg font-black font-display leading-tight tracking-tight">{title}</h3>
+        </div>
       </div>
+    </div>
 
-      <h3 className="text-xl font-black mb-1 font-display uppercase tracking-tight leading-tight min-h-[50px]">{title}</h3>
+    <div className="flex flex-col flex-1 p-6">
       <p className="text-sm text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">
         {desc}
       </p>
 
-      <div className="mb-8">
-        <div className="text-3xl font-black text-secondary tracking-tight">R$ {price}</div>
-        <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mt-1">Pagamento Único</div>
+      <div className="border-t border-slate-200 dark:border-slate-800 pt-5 mb-6">
+        <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest mb-1">Pagamento único</div>
+        <div className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">R$ {price}</div>
       </div>
 
-      <ul className="space-y-3 mb-10 flex-1">
+      <ul className="space-y-3 mb-7 flex-1">
         {features.map((f, i) => (
           <li key={i} className={`flex items-center gap-2 text-xs font-medium ${typeof f === 'string' ? 'text-slate-600 dark:text-slate-400' : f.color}`}>
-            <span className={`material-icons-outlined text-base ${typeof f === 'string' ? 'text-secondary' : 'opacity-70'}`}>check_circle</span>
+            <span className={`material-icons-outlined text-sm ${typeof f === 'string' ? 'text-purple-600 dark:text-purple-400' : 'opacity-70'}`}>check_circle</span>
             {typeof f === 'string' ? f : f.text}
           </li>
         ))}
@@ -43,12 +49,12 @@ const ProductCard: React.FC<{
 
       <Link 
         to={`/digital-card/order?type=${type}`} 
-        className={`w-full py-4 rounded-2xl font-black text-center transition-all active:scale-95 flex items-center justify-center gap-2 shadow-xl ${
-          btnColor ? btnColor : (color === 'bg-secondary' ? 'bg-secondary hover:bg-green-700 text-white shadow-secondary/20' : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900')
+        className={`w-full py-3 rounded-lg font-bold text-sm text-center transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg ${
+          btnColor ? btnColor : 'bg-[#a78bfa] hover:bg-[#8b5cf6] text-slate-950 shadow-purple-500/20'
         }`}
       >
+        <span className="material-icons-outlined text-xs">{btnIcon}</span>
         {btnLabel}
-        <span className="material-icons-outlined text-sm">{btnIcon}</span>
       </Link>
     </div>
   </div>
@@ -95,7 +101,7 @@ export const DigitalCard: React.FC = () => {
             </h1>
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto lg:ml-0">
               O cartão de visita inteligente que revoluciona a forma de fazer networking, o chaveiro com os dados do seu PET, Tecnologias NFC e QRCODE que conecta instantaneamente seus contatos e seu perfil digital. 
-              <span className="block mt-4 text-primary-500 italic font-medium">
+              <span className="block mt-3 text-sm md:text-base text-primary-500 italic font-normal">
                 ("Pare de gastar com cartões impressos que depois vão para o lixo")
               </span>
             </p>
@@ -202,7 +208,7 @@ export const DigitalCard: React.FC = () => {
             color="bg-blue-600"
             btnLabel="Comprar Agora"
             btnIcon="payments"
-            btnColor="bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20"
+            btnColor="bg-[#a78bfa] hover:bg-[#8b5cf6] text-slate-950 shadow-purple-500/20"
             features={[
               'Chaveiro Físico com GPS',
               'Ideal para Identificação PET',
@@ -235,7 +241,7 @@ export const DigitalCard: React.FC = () => {
             desc="O clássico cartão de visita reinventado. Acabamento premium com tecnologia de aproximação."
             icon="credit_card"
             color="bg-purple-600"
-            btnColor="bg-purple-600 hover:bg-purple-700 text-white shadow-purple-500/20"
+            btnColor="bg-[#a78bfa] hover:bg-[#8b5cf6] text-slate-950 shadow-purple-500/20"
             features={[
               'Cartão PVC Premium',
               'Tecnologia NFC Ativa',

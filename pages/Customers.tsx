@@ -5,15 +5,15 @@ import { supabase } from '../lib/supabase';
 
 const ClientLogo: React.FC<{ name: string; industry: string; icon: string; logoUrl?: string }> = ({ name, industry, icon, logoUrl }) => (
   <motion.div 
-    whileHover={{ y: -5, scale: 1.05 }}
-    className="bg-white dark:bg-slate-900 p-4 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-md flex items-center gap-4 group transition-all duration-500 hover:border-primary-500/20"
+    whileHover={{ y: -3 }}
+    className="flex flex-col items-center text-center gap-3 group transition-all duration-300"
   >
-    <div className="w-16 h-16 min-w-[64px] rounded-2xl bg-slate-50 dark:bg-slate-950/50 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:bg-primary-500/5">
+    <div className="w-20 h-20 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden shadow-sm transition-all duration-300 group-hover:border-primary-500/30 group-hover:shadow-md">
        {logoUrl ? (
          <img 
            src={logoUrl} 
            alt={`Logo ${name}`} 
-           className="w-full h-full object-contain p-3 filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 scale-100 group-hover:scale-110"
+           className="w-full h-full object-cover filter grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
            onError={(e) => {
              (e.target as HTMLImageElement).src = "https://placehold.co/200x200?text=LOGO";
            }}
@@ -22,7 +22,7 @@ const ClientLogo: React.FC<{ name: string; industry: string; icon: string; logoU
          <span className="material-icons-outlined text-2xl text-slate-300 group-hover:text-primary-500 transition-colors">{icon}</span>
        )}
     </div>
-    <div className="flex flex-col gap-0.5 overflow-hidden text-left">
+    <div className="flex flex-col gap-0.5 overflow-hidden">
       <h3 className="text-[11px] font-bold uppercase tracking-tighter text-slate-900 dark:text-white leading-tight truncate">{name}</h3>
       <p className="text-[8px] font-normal text-slate-400 uppercase tracking-[0.1em] leading-tight line-clamp-1">
         {industry}
@@ -142,7 +142,7 @@ export const Customers: React.FC = () => {
         <p className="text-slate-500 dark:text-slate-400 text-sm max-w-xl mx-auto">Empresas que confiam na CidEngenharia para suas soluções de identidade e tecnologia.</p>
       </header>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-40">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-x-8 gap-y-10 mb-32">
         <AnimatePresence mode="popLayout">
           {CLIENTS.map((client, idx) => (
             <motion.div 
@@ -160,10 +160,10 @@ export const Customers: React.FC = () => {
       <section className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
         <div className="space-y-12">
           <div className="space-y-4">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tighter">
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 dark:text-white uppercase font-display tracking-tight">
               A Voz de quem <span className="text-primary-500">Constrói</span> conosco
             </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-lg">Histórias reais de transformação digital e visual.</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">Depoimentos de nossos clientes</p>
           </div>
 
           <div className="space-y-8 max-h-[700px] overflow-y-auto custom-scrollbar pr-6">
@@ -172,10 +172,10 @@ export const Customers: React.FC = () => {
             ) : (
               <AnimatePresence mode="popLayout">
                 {testimonials.map((t) => (
-                  <motion.div key={t.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-white dark:bg-slate-900/50 p-10 rounded-[3rem] border border-slate-100 dark:border-slate-800 shadow-xl relative group">
-                    <span className="material-icons-outlined absolute top-8 right-10 text-primary-500/10 text-7xl select-none">format_quote</span>
-                    <div className="flex items-center gap-5 mb-8">
-                      <div className="w-16 h-16 rounded-2xl border-2 border-primary-500/20 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-lg">
+                  <motion.div key={t.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="bg-white dark:bg-slate-900/50 p-7 rounded-xl border border-slate-100 dark:border-slate-800 shadow-md relative group">
+                    <span className="material-icons-outlined absolute top-6 right-7 text-primary-500/10 text-5xl select-none">format_quote</span>
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-14 h-14 rounded-full border border-primary-500/20 overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center shadow-sm">
                         {t.photo_url ? <img src={t.photo_url} className="w-full h-full object-cover" /> : <span className="material-icons-outlined text-slate-400 text-2xl">person</span>}
                       </div>
                       <div>
@@ -192,27 +192,27 @@ export const Customers: React.FC = () => {
         </div>
 
         <div className="sticky top-24">
-          <div className="bg-slate-900 dark:bg-slate-950 p-12 rounded-[4rem] shadow-2xl relative overflow-hidden flex flex-col justify-center border border-white/5">
+          <div className="bg-slate-900 dark:bg-slate-950 p-8 rounded-xl shadow-xl relative overflow-hidden flex flex-col justify-center border border-white/5">
             <div className="engineering-grid absolute inset-0 opacity-10 pointer-events-none"></div>
             <div className="relative z-10 space-y-10">
               <div className="space-y-2 text-center">
-                 <h3 className="text-2xl font-black text-white uppercase font-display tracking-tight">Conte sua História</h3>
+                 <h3 className="text-xl font-black text-white uppercase font-display tracking-tight">Conte sua História</h3>
                  <p className="text-slate-500 text-xs uppercase tracking-widest">Sua marca em destaque</p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
-                  <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Seu Nome Completo" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all" />
-                  <input type="text" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} placeholder="Seu Cargo / Empresa" className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white text-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all" />
+                  <input type="text" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} placeholder="Seu Nome Completo" className="w-full bg-white/5 border border-white/10 rounded-lg px-5 py-4 text-white text-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all" />
+                  <input type="text" required value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} placeholder="Seu Cargo / Empresa" className="w-full bg-white/5 border border-white/10 rounded-lg px-5 py-4 text-white text-sm outline-none focus:ring-2 focus:ring-primary-500 transition-all" />
                 </div>
-                <textarea required rows={5} value={formData.text} onChange={e => setFormData({...formData, text: e.target.value})} placeholder="Descreva sua experiência com nosso Studio..." className="w-full bg-white/5 border border-white/10 rounded-[2rem] px-6 py-5 text-white text-sm resize-none outline-none focus:ring-2 focus:ring-primary-500 transition-all"></textarea>
+                <textarea required rows={5} value={formData.text} onChange={e => setFormData({...formData, text: e.target.value})} placeholder="Descreva sua experiência com nosso Studio..." className="w-full bg-white/5 border border-white/10 rounded-lg px-5 py-4 text-white text-sm resize-none outline-none focus:ring-2 focus:ring-primary-500 transition-all"></textarea>
                 
                 <div className="flex flex-col gap-6">
-                  <div onClick={() => fileInputRef.current?.click()} className={`flex-1 border-2 border-dashed rounded-2xl p-6 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all hover:bg-white/5 ${photoPreview ? 'border-primary-500 bg-primary-500/5' : 'border-white/10'}`}>
+                  <div onClick={() => fileInputRef.current?.click()} className={`flex-1 border border-dashed rounded-lg p-5 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all hover:bg-white/5 ${photoPreview ? 'border-primary-500 bg-primary-500/5' : 'border-white/10'}`}>
                     {photoPreview ? <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-primary-500 shadow-xl"><img src={photoPreview} className="w-full h-full object-cover" /></div> : <><span className="material-icons-outlined text-3xl text-white/20">add_a_photo</span><span className="text-[10px] font-bold uppercase text-white/40 tracking-widest">Foto de Perfil</span></>}
                     <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handlePhotoUpload} />
                   </div>
-                  <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-primary-500 text-white font-black rounded-2xl uppercase text-[10px] tracking-[0.2em] shadow-2xl shadow-primary-500/30 disabled:opacity-50 transition-all active:scale-95 hover:bg-primary-600">
+                  <button type="submit" disabled={isSubmitting} className="self-center px-6 h-10 bg-primary-500/90 text-white font-bold rounded-lg uppercase text-[9px] tracking-[0.18em] shadow-lg shadow-primary-500/20 disabled:opacity-50 transition-all active:scale-95 hover:bg-primary-600">
                     {isSubmitting ? 'Sincronizando...' : 'Publicar Depoimento'}
                   </button>
                 </div>
