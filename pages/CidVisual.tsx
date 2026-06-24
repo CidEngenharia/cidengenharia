@@ -17,6 +17,7 @@ interface ServiceDetail {
   price?: string;
   unit?: string;
   icon: string;
+  imageUrl?: string;
   desc: string;
   features: string[];
   fullDesc: string;
@@ -39,6 +40,7 @@ const categorias: Categoria[] = [
         id: 'copia-pb',
         title: 'Cópia Preto e Branco',
         icon: 'print',
+        imageUrl: '/cidvisual-grafica-pb.png',
         desc: 'Impressão monocromática de alta qualidade para documentos e materiais.',
         features: ['Impressão rápida', 'Papel sulfite 75g/90g', 'Alta definição', 'Ideal para apostilas'],
         fullDesc: 'Impressão monocromática de alta precisão ideal para apostilas, relatórios, trabalhos acadêmicos e documentos gerais. Garantia de leitura nítida e alta velocidade de entrega.',
@@ -48,6 +50,7 @@ const categorias: Categoria[] = [
         id: 'copia-color',
         title: 'Cópia Colorida / Análise',
         icon: 'print',
+        imageUrl: '/cidvisual-grafica-colorida.png',
         desc: 'Impressão colorida fiel com análise de qualidade incluída.',
         features: ['Fidelidade de cores', 'Papel offset e couchê', 'Análise de contraste', 'Ideal para apresentações'],
         fullDesc: 'Impressão colorida de alta fidelidade com análise prévia de contraste e resolução. Perfeita para apresentações corporativas, portfólios, cartazes e materiais ricos em imagens.',
@@ -57,6 +60,7 @@ const categorias: Categoria[] = [
         id: 'xerox',
         title: 'Xerox',
         icon: 'content_copy',
+        imageUrl: '/cidvisual-grafica-xerox.png',
         desc: 'Reprodução rápida de documentos com tecnologia de última geração.',
         features: ['Cópia instantânea', 'Vidro plano para livros', 'Frente e verso automático', 'Redução e ampliação'],
         fullDesc: 'Serviço rápido de fotocópia de documentos, livros, certidões e contratos. Equipamentos modernos que preservam a legibilidade do documento original com máxima fidelidade.',
@@ -68,6 +72,7 @@ const categorias: Categoria[] = [
         price: '99,90',
         unit: '500 unid',
         icon: 'auto_awesome_motion',
+        imageUrl: '/cidvisual-grafica-panfletos.png',
         isStartingPrice: true,
         desc: 'Material promocional em papel couchê premium para distribuição e prospecção ativa.',
         features: ['Papel Couchê 115g/150g', 'Cores Vibrantes (4x0 ou 4x4)', 'Tamanhos 10x15cm / 15x21cm', 'Cortes Precisos'],
@@ -84,6 +89,7 @@ const categorias: Categoria[] = [
         id: 'canecas',
         title: 'Canecas Personalizadas',
         icon: 'local_cafe',
+        imageUrl: '/cidvisual-produto-caneca.png',
         desc: 'Canecas com sua arte, logo ou foto em alta resolução.',
         features: ['Porcelana premium', 'Resistente a micro-ondas', 'Sublimação HD', 'Caixinha inclusa'],
         fullDesc: 'Canecas de porcelana de alta qualidade personalizadas por sublimação. Perfeitas para presentes, brindes corporativos e uso diário. Resistentes ao calor e lavagens frequentes.',
@@ -93,6 +99,7 @@ const categorias: Categoria[] = [
         id: 'camisetas',
         title: 'Camisetas',
         icon: 'checkroom',
+        imageUrl: '/cidvisual-produto-camiseta.png',
         desc: 'Estampas personalizadas em diversos modelos e tamanhos.',
         features: ['Algodão ou Poliéster', 'Sublimação ou Silk', 'Cores duráveis', 'Costura reforçada'],
         fullDesc: 'Camisetas personalizadas com estampas de alta definição. Oferecemos tecidos confortáveis e técnicas de estamparia modernas que resistem a lavagens sem rachar ou desbotar.',
@@ -102,6 +109,7 @@ const categorias: Categoria[] = [
         id: 'porta-retratos',
         title: 'Porta-Retratos',
         icon: 'filter_b&w',
+        imageUrl: '/cidvisual-produto-porta-retrato.png',
         desc: 'Molduras e porta-retratos com impressão personalizada.',
         features: ['Tamanhos variados', 'Madeira ou acrílico', 'Foto inclusa', 'Acabamento elegante'],
         fullDesc: 'Molduras de alto padrão com fotos impressas em papel fotográfico de alta durabilidade. Uma forma elegante de preservar momentos ou presentear pessoas especiais.',
@@ -111,21 +119,12 @@ const categorias: Categoria[] = [
         id: 'garrafas-squize',
         title: 'Garrafas Squize',
         icon: 'sports_bar',
+        imageUrl: '/cidvisual-produto-squeeze.png',
         desc: 'Garrafas esportivas com personalização completa.',
         features: ['Alumínio ou inox', 'Bico antivazamento', 'Sublimação colorida', 'Mantém a temperatura'],
         fullDesc: 'Squeeze esportivo personalizado, ideal para academias, escritórios e brindes corporativos. Material resistente e personalização de alta durabilidade.',
         color: 'bg-violet-600'
       },
-      {
-        id: 'custom-products',
-        title: 'Produtos Personalizados',
-        price: 'Sob Consulta',
-        icon: 'card_giftcard',
-        desc: 'Brindes e itens corporativos premium com a cara da sua marca.',
-        features: ['Kits corporativos', 'Impressão UV', 'Gravação a Laser', 'Materiais nobres'],
-        fullDesc: 'Transformamos objetos comuns em peças de desejo. De canetas a moletons, utilizamos técnicas avançadas de personalização para garantir que sua marca seja lembrada com qualidade e sofisticação.',
-        color: 'bg-amber-500'
-      }
     ],
   },
   {
@@ -138,6 +137,7 @@ const categorias: Categoria[] = [
         price: '55,00',
         unit: 'unid',
         icon: 'branding_watermark',
+        imageUrl: '/cidvisual-comunicacao-banner.png',
         isStartingPrice: true,
         desc: 'Impressão em lona de alta resistência com acabamento profissional para fachadas e eventos.',
         features: ['Lona 440g Brilho/Fosca', 'Acabamento com Bastão e Corda', 'Resistente a Sol e Chuva', 'Impressão HD Digital'],
@@ -146,18 +146,20 @@ const categorias: Categoria[] = [
       },
       {
         id: 'visual-comm',
-        title: 'Comunicação Visual Premium',
+        title: 'Backdrop Personalizado',
         price: '50,00/h',
         icon: 'visibility',
-        desc: 'Branding, logotipos e estrutura visual para sua empresa em alta definição.',
-        features: ['Criação de Logos', 'Manual da Marca', 'Social Media Design', 'Sinalização'],
-        fullDesc: 'Engenharia visual aplicada ao branding. Criamos identidades que comunicam autoridade e profissionalismo, desde a paleta de cores até a sinalização física do seu estabelecimento.',
+        imageUrl: '/cidvisual-comunicacao-backdrop.png',
+        desc: 'Painéis personalizados para eventos, fotos, ativações de marca e cenários promocionais.',
+        features: ['Acabamento com ilhós', 'Estrutura sob medida', 'Impressão em lona HD', 'Ideal para eventos'],
+        fullDesc: 'Backdrops personalizados para eventos, recepções, lançamentos e ações promocionais. Produzimos painéis com impressão em alta definição, acabamento reforçado e leitura visual profissional para destacar sua marca em fotos e ambientes.',
         color: 'bg-rose-500'
       },
       {
         id: 'faixa',
         title: 'Faixa',
         icon: 'width_full',
+        imageUrl: '/cidvisual-comunicacao-faixa.png',
         desc: 'Faixas em múltiplos tamanhos para eventos, comércios e promoções.',
         features: ['Lona reforçada', 'Acabamento com ilhós', 'Cores vibrantes', 'Tamanhos sob medida'],
         fullDesc: 'Faixas em lona para divulgação rápida de promoções, inaugurações, eventos e avisos. Fácil instalação e alta visibilidade para atrair clientes.',
@@ -167,6 +169,7 @@ const categorias: Categoria[] = [
         id: 'cavalete',
         title: 'Cavalete',
         icon: 'art_track',
+        imageUrl: '/cidvisual-comunicacao-cavalete.png',
         desc: 'Cavaletes personalizados para pontos de venda e eventos.',
         features: ['Estrutura de madeira/metal', 'Dupla face', 'Lona de alta resistência', 'Fácil transporte'],
         fullDesc: 'Cavalete promocional dupla face, ideal para calçadas, sinalização de entrada e direcionamento de fluxo de clientes. Estrutura estável e lona impermeável.',
@@ -182,30 +185,41 @@ const categorias: Categoria[] = [
         id: 'adesivos-vinil',
         title: 'Adesivos Vinil',
         icon: 'sticky_note_2',
+        imageUrl: '/cidvisual-plotagem-adesivos.png',
         desc: 'Adesivos de alta durabilidade para carros, vidros, paredes e produtos.',
-        features: ['Vinil impermeável', 'Corte especial', 'Resistente a UV', 'Fácil aplicação'],
-        fullDesc: 'Adesivos de vinil com recorte eletrônico personalizados. Podem ser aplicados em carros, fachadas, embalagens e paredes. Alta resistência à água e ao sol.',
+        features: ['Vinil impermeável', 'Corte especial', 'Resistente a UV', 'Acabamento personalizado'],
+        fullDesc: 'Adesivos de vinil com recorte eletrônico personalizados para rótulos, brindes, embalagens, carros, fachadas e superfícies diversas. Produção com alta definição, resistência à água e acabamento limpo.',
         color: 'bg-violet-600'
       },
       {
         id: 'plotagem',
         title: 'Plotagem',
         icon: 'layers',
-        desc: 'Plotagem em grande formato para fachadas, vitrines e decoração.',
-        features: ['Recorte de precisão', 'Vinil fosco ou brilho', 'Instalação fácil', 'Alta durabilidade'],
-        fullDesc: 'Serviço de plotagem de recorte ou impressão para sinalização de vitrines, envelopamento parcial de frotas e decoração de ambientes com máxima precisão.',
+        imageUrl: '/cidvisual-plotagem-veiculos.png',
+        desc: 'Plotagem para veículos, fachadas, vitrines e comunicação externa personalizada.',
+        features: ['Recorte de precisão', 'Vinil fosco ou brilho', 'Aplicação técnica', 'Alta durabilidade'],
+        fullDesc: 'Serviço de plotagem de recorte ou impressão para veículos, frotas, fachadas, vitrines e decoração de ambientes. Aplicação com máxima precisão para destacar marcas e sinalizações com acabamento profissional.',
         color: 'bg-violet-600'
       },
       {
-        id: 'vinil-resinado',
-        title: 'Adesivos em Vinil & Resinados',
-        price: '35,00 (3 unid)',
+        id: 'plotagem-geladeiras',
+        title: 'Plotagem em Geladeiras',
         icon: 'design_services',
-        isStartingPrice: true,
-        desc: 'Adesivos em Vinil e Adesivo personalizado Resinado de alta durabilidade e acabamento premium.',
-        features: ['Adesivos Automotivos', 'Personalização para Empresas', 'Recorte Eletrônico', 'Consultar Condições'],
-        fullDesc: 'Trabalhamos com adesivagem técnica de alta performance. O adesivo em vinil oferece versatilidade para sinalização externa e interna, enquanto o acabamento resinado proporciona um efeito 3D sofisticado, alta proteção contra raios UV e durabilidade extrema, sendo ideal para identificação de marcas em frotas ou equipamentos premium.',
+        imageUrl: '/cidvisual-plotagem-geladeiras.png',
+        desc: 'Renovação visual de geladeiras com vinil adesivo colorido, fosco ou brilhante.',
+        features: ['Vinil decorativo', 'Cores variadas', 'Aplicação sob medida', 'Acabamento renovado'],
+        fullDesc: 'Plotagem em geladeiras para renovar, personalizar ou padronizar equipamentos comerciais e residenciais. Utilizamos vinil de alta aderência com acabamento colorido, fosco ou brilhante para transformar o visual da peça.',
         color: 'bg-teal-500'
+      },
+      {
+        id: 'plotagem-vidros',
+        title: 'Plotagem em Vidros',
+        icon: 'window',
+        imageUrl: '/cidvisual-plotagem-vidros.png',
+        desc: 'Aplicação em portas, divisórias e vitrines com comunicação visual sob medida.',
+        features: ['Vinil jateado ou impresso', 'Instalação alinhada', 'Privacidade visual', 'Ideal para empresas'],
+        fullDesc: 'Plotagem em vidros para portas, vitrines, divisórias e fachadas. A solução pode reforçar a identidade da marca, criar privacidade e transformar áreas envidraçadas em pontos de comunicação visual com acabamento profissional.',
+        color: 'bg-sky-500'
       }
     ],
   },
@@ -372,49 +386,101 @@ const BannerConfigurator: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 };
 const ServiceCard: React.FC<{
   service: ServiceDetail;
+  categoryTitle: string;
   isActive: boolean;
   onSelect: () => void;
   onShowDetails: () => void;
-}> = ({ service, isActive, onSelect, onShowDetails }) => {
+}> = ({ service, categoryTitle, isActive, onSelect, onShowDetails }) => {
+  const isCompactCategory = categoryTitle === 'Gráfica & Cópias' || categoryTitle === 'Produtos Personalizados' || categoryTitle === 'Comunicação Visual' || categoryTitle === 'Aplicação & Plotagem';
+
   return (
     <div 
       onClick={onSelect}
-      className={`relative flex flex-col p-6 rounded-2xl transition-all duration-500 hover:shadow-2xl h-full cursor-pointer group bg-white/[0.03] backdrop-blur-md border ${
-      isActive ? 'border-violet-500 ring-1 ring-violet-500/20 z-10 shadow-lg shadow-violet-500/10' : 'border-violet-500/10 hover:border-violet-500/30'
+      className={`relative grid grid-cols-1 md:grid-cols-[0.92fr_1.08fr] overflow-hidden ${isCompactCategory ? 'min-h-[260px]' : 'min-h-[330px]'} rounded-[1.6rem] transition-all duration-500 hover:shadow-2xl h-full cursor-pointer group bg-[#f8f0dc] border ${
+      isActive ? 'border-orange-500 ring-2 ring-orange-500/25 z-10 shadow-xl shadow-orange-500/10' : 'border-white/80 hover:border-orange-300'
     }`}>
-      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top left, rgba(139,92,246,0.1) 0%, transparent 70%)' }} />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at top left, rgba(249,115,22,0.14) 0%, transparent 65%)' }} />
 
-      <div className="flex items-start gap-4 mb-6 relative z-10">
-        <div className="w-12 h-12 rounded-xl bg-slate-800/40 flex items-center justify-center shadow-sm border border-violet-500/10 flex-shrink-0 transition-transform group-hover:scale-110">
-          <span className="material-icons-outlined text-xl text-violet-400">{service.icon}</span>
+      <div className={`relative ${isCompactCategory ? 'min-h-[170px] p-4' : 'min-h-[220px] p-6'} md:min-h-full flex flex-col justify-center bg-[#fff7e7]`}>
+        {!isCompactCategory && (
+          <div className="flex items-center justify-between gap-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.16em] text-orange-600">
+              {categoryTitle}
+            </span>
+            {service.price && (
+              <span className="rounded-full bg-white/80 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-700 shadow-sm">
+                {service.isStartingPrice ? 'A partir' : 'Valor'} R$ {service.price}
+              </span>
+            )}
+          </div>
+        )}
+
+        {isCompactCategory && service.price && (
+          <div className="absolute left-4 top-4 z-10">
+            <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-slate-700 shadow-sm">
+              {service.isStartingPrice ? 'A partir' : 'Valor'} R$ {service.price}
+            </span>
+          </div>
+        )}
+
+        <div className={`relative mx-auto ${isCompactCategory ? 'my-0 h-36 w-40 md:h-40 md:w-44' : 'my-4 h-40 w-44 md:h-48 md:w-52'}`}>
+          {service.imageUrl ? (
+            <>
+              <div className="absolute inset-2 rotate-[-4deg] rounded-[1.2rem] border-2 border-orange-500/80"></div>
+              <img
+                src={service.imageUrl}
+                alt={service.title}
+                className="relative h-full w-full rounded-[1.4rem] object-cover shadow-xl shadow-orange-900/15"
+              />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-4 rotate-[-8deg] rounded-[1.2rem] border-2 border-orange-500/80"></div>
+              <div className="absolute inset-0 rounded-[2rem] bg-white/80 shadow-xl shadow-orange-900/10"></div>
+              <div className={`absolute inset-6 ${service.color} rounded-[1.4rem] opacity-95 shadow-lg shadow-orange-900/20`}></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="material-icons-outlined text-[4.2rem] text-white drop-shadow-md">{service.icon}</span>
+              </div>
+            </>
+          )}
         </div>
-        <div className="space-y-1">
-          <h3 className="text-lg font-bold text-white leading-tight group-hover:text-violet-400 transition-colors">{service.title}</h3>
-          <p className="text-[10px] text-slate-400 font-medium leading-relaxed">
+
+        {!isCompactCategory && (
+          <div className="flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-[0.16em] text-orange-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-500"></span>
+            Modelo do serviço
+          </div>
+        )}
+      </div>
+
+      <div className={`relative z-10 flex flex-col ${isCompactCategory ? 'p-5 md:p-6' : 'p-6 md:p-7'}`}>
+        <div className="flex-1">
+          <h3 className={`${isCompactCategory ? 'text-xl' : 'text-2xl'} font-black text-slate-900 leading-tight group-hover:text-orange-600 transition-colors`}>{service.title}</h3>
+          <p className={`${isCompactCategory ? 'mt-3 text-xs' : 'mt-4 text-sm'} font-medium text-slate-600 leading-relaxed`}>
             {service.desc}
           </p>
+
+          <ul className={`${isCompactCategory ? 'mt-4 gap-2' : 'mt-6 gap-3'} grid grid-cols-1`}>
+            {service.features.slice(0, isCompactCategory ? 3 : 4).map((feature, i) => (
+              <li key={i} className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="material-icons-outlined text-[#10b981] text-lg mt-[-2px]">check</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
 
-      <div className="mb-8 flex-1 relative z-10">
-        <ul className="space-y-3">
-          {service.features.slice(0, 4).map((feature, i) => (
-            <li key={i} className="flex items-center gap-3 text-xs font-medium text-slate-300">
-              <span className="material-icons-outlined text-[#10b981] text-lg">check</span>
-              {feature}
-            </li>
-          ))}
-        </ul>
+        {!isCompactCategory && (
+          <button 
+            onClick={(e) => { e.stopPropagation(); onShowDetails(); }}
+            className="mt-7 w-full py-3.5 bg-slate-950 hover:bg-orange-600 text-white rounded-xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3 relative z-10"
+          >
+            Ver Detalhes
+            <span className="material-icons-outlined text-sm">arrow_forward</span>
+          </button>
+        )}
       </div>
-
-      <button 
-        onClick={(e) => { e.stopPropagation(); onShowDetails(); }}
-        className="w-full py-3.5 bg-slate-900/80 hover:bg-slate-800 text-white rounded-xl font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-3 border border-violet-500/10 hover:border-violet-500/30 relative z-10"
-      >
-        Explorar {service.title}
-        <span className="material-icons-outlined text-sm">arrow_forward</span>
-      </button>
     </div>
   );
 };
@@ -529,8 +595,22 @@ export const CidVisual: React.FC = () => {
           ))}
         </div>
 
-        {/* GRID DE SERVIÇOS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* SERVIÇOS DA ABA */}
+        <div className="mb-6 flex flex-col gap-2 text-center md:text-left">
+          <span className="text-[10px] font-black uppercase tracking-[0.22em] text-orange-400">
+            {categorias[activeCategoryIndex].icone} Aba {activeCategoryIndex + 1}
+          </span>
+          <h2 className="text-2xl md:text-3xl font-black text-white">
+            {categorias[activeCategoryIndex].titulo}
+          </h2>
+          {categorias[activeCategoryIndex].titulo !== 'Gráfica & Cópias' && categorias[activeCategoryIndex].titulo !== 'Produtos Personalizados' && (
+            <p className="text-sm text-slate-400 max-w-2xl">
+              Escolha um modelo e veja a descrição do serviço ao lado, separados por categoria.
+            </p>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
           {categorias[activeCategoryIndex].servicos.map((s, si) => (
             <motion.div
               key={s.id}
@@ -540,6 +620,7 @@ export const CidVisual: React.FC = () => {
             >
               <ServiceCard
                 service={s}
+                categoryTitle={categorias[activeCategoryIndex].titulo}
                 isActive={activeServiceId === s.id}
                 onSelect={() => setActiveServiceId(s.id)}
                 onShowDetails={() => setShowDetailModal(s)}
@@ -589,9 +670,17 @@ export const CidVisual: React.FC = () => {
                 <div className={`absolute top-0 right-0 w-32 h-32 ${showDetailModal.color} opacity-10 blur-[80px]`}></div>
                 <div className="absolute inset-0 engineering-grid opacity-5"></div>
                 <div className="relative h-full flex flex-col justify-center items-center p-12 text-center space-y-6">
-                   <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-xl border border-slate-100 dark:border-white/10">
-                     <span className="material-icons-outlined text-5xl text-violet-500">{showDetailModal.icon}</span>
-                   </div>
+                   {showDetailModal.imageUrl ? (
+                     <img
+                       src={showDetailModal.imageUrl}
+                       alt={showDetailModal.title}
+                       className="h-44 w-full rounded-[2rem] object-cover shadow-xl border border-slate-100 dark:border-white/10"
+                     />
+                   ) : (
+                     <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-900 flex items-center justify-center shadow-xl border border-slate-100 dark:border-white/10">
+                       <span className="material-icons-outlined text-5xl text-violet-500">{showDetailModal.icon}</span>
+                     </div>
+                   )}
                    <div>
                      <h2 className="text-3xl font-bold dark:text-white leading-tight">{showDetailModal.title}</h2>
                      <p className="text-violet-500/80 text-[10px] font-black uppercase tracking-widest mt-2">Especificação Técnica</p>
