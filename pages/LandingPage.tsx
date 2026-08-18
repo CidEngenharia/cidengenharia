@@ -1,12 +1,38 @@
-import React, { useContext } from 'react';
-import { motion } from 'framer-motion';
+import React, { useContext, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { LangContext } from '../lib/LangContext';
 import { TopBar } from '../components/TopBar';
 
 const MotionLink = motion(Link);
 
-// Balões flutuantes — idênticos ao Home.tsx
+// Ícone SVG de Pasta Fechada (Amarela no formato da referência)
+const FolderClosedIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3 6.5C3 5.39543 3.89543 4.5 5 4.5H9.4C9.93 4.5 10.44 4.71 10.81 5.09L12.2 6.5H19C20.1046 6.5 21 7.39543 21 8.5V17.5C21 18.6046 20.1046 19.5 19 19.5H5C3.89543 19.5 3 18.6046 3 17.5V6.5Z"
+      fill="#F59E0B"
+    />
+    <rect x="3" y="8" width="18" height="11.5" rx="2" fill="#FBBF24" />
+  </svg>
+);
+
+// Ícone SVG de Pasta Aberta (Amarela no formato da referência)
+const FolderOpenIcon: React.FC<{ className?: string }> = ({ className = 'w-4 h-4' }) => (
+  <svg viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M3 6.5C3 5.39543 3.89543 4.5 5 4.5H9.4C9.93 4.5 10.44 4.71 10.81 5.09L12.2 6.5H19C20.1046 6.5 21 7.39543 21 8.5V15.5H3V6.5Z"
+      fill="#D97706"
+    />
+    <rect x="4" y="8.5" width="16" height="7.5" rx="1" fill="#F59E0B" opacity="0.65" />
+    <path
+      d="M2.5 10.5H21.5L19.4 19.2C19.2 20 18.4 20.5 17.5 20.5H4.5C3.6 20.5 2.8 20 2.6 19.2L2.5 10.5Z"
+      fill="#FBBF24"
+    />
+  </svg>
+);
+
+// Balões flutuantes de fundo
 const bgBubbles = [
   { size: 'w-[45%] h-[45%]', pos: 'top-[-15%] right-[-10%]', color: 'rgba(109,40,217,0.4)', delay: 0, duration: 8 },
   { size: 'w-[40%] h-[40%]', pos: 'bottom-[-5%] left-[-5%]', color: 'rgba(37,99,235,0.3)', delay: 2, duration: 12 },
@@ -26,47 +52,102 @@ const galaxyStars = Array.from({ length: 120 }, (_, i) => ({
   opacity: 0.22 + ((i % 6) * 0.08),
 }));
 
-const portais = [
-  {
-    id: 'cidvisual',
-    nome: 'CidVisual',
-    href: '/cidvisual',
-    icone: '🎨',
-    cor: 'from-violet-600 to-purple-700',
-    corBorda: 'border-violet-500/40',
-    corGlow: 'rgba(139,92,246,0.35)',
-    corTexto: 'text-violet-300',
-    corBg: 'bg-violet-500/10',
-    servicos: [
-      'Gráfica',
-      'Cópia P&B e Colorida / Análise',
-      'Xerox',
-      'Produtos Personalizados',
-      'Canecas · Camisetas',
-      'Porta-Retratos · Garrafas Squize',
-      'Banner · Faixa · Cavalete',
-      'Adesivos Vinil',
-      'Plotagem',
-    ],
-  },
+interface TreeLeaf {
+  nome: string;
+}
+
+interface TreeCategory {
+  id: string;
+  titulo: string;
+  itens: TreeLeaf[];
+}
+
+interface TreePortal {
+  id: string;
+  nome: string;
+  href: string;
+  icone: string;
+  corTexto: string;
+  corBorda: string;
+  corBg: string;
+  corGlow: string;
+  categorias: TreeCategory[];
+}
+
+const treeData: TreePortal[] = [
   {
     id: 'cidengenharia',
     nome: 'CidDesenvolvimento',
     href: '/cidengenharia',
     icone: '∞',
-    cor: 'from-yellow-500 to-amber-600',
-    corBorda: 'border-yellow-500/40',
-    corGlow: 'rgba(251,191,36,0.3)',
-    corTexto: 'text-yellow-300',
+    corTexto: 'text-yellow-400',
+    corBorda: 'border-yellow-500/30',
     corBg: 'bg-yellow-500/10',
-    servicos: [
-      'Criação de Sites',
-      'Aluguel de sites',
-      'Criação de Landepages',
-      'Criação e Edição Videos',
-      'Prompts em IA',
-      'Desenvolvimento de Sistemas Web',
-      'Criação e Edição de Imagens',
+    corGlow: 'rgba(251,191,36,0.25)',
+    categorias: [
+      {
+        id: 'web-landing',
+        titulo: 'Sites & Landing',
+        itens: [
+          { nome: 'Criação de Sites' },
+          { nome: 'Aluguel de sites' },
+          { nome: 'Criação de Landpages' },
+        ],
+      },
+      {
+        id: 'sistemas',
+        titulo: 'Sistemas Web',
+        itens: [
+          { nome: 'Desenvolvimento de Sistemas Web' },
+          { nome: 'Prompts em IA' },
+        ],
+      },
+      {
+        id: 'midia-ia',
+        titulo: 'Criação & Edição',
+        itens: [
+          { nome: 'Criação e Edição Videos' },
+          { nome: 'Criação e Edição de Imagens' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'cidvisual',
+    nome: 'CidVisual',
+    href: '/cidvisual',
+    icone: '🎨',
+    corTexto: 'text-violet-300',
+    corBorda: 'border-violet-500/30',
+    corBg: 'bg-violet-500/10',
+    corGlow: 'rgba(139,92,246,0.25)',
+    categorias: [
+      {
+        id: 'grafica',
+        titulo: 'Gráfica & Cópias',
+        itens: [
+          { nome: 'Gráfica' },
+          { nome: 'Cópia P&B e Colorida / Análise' },
+          { nome: 'Xerox' },
+        ],
+      },
+      {
+        id: 'personalizados',
+        titulo: 'Personalizados',
+        itens: [
+          { nome: 'Canecas · Camisetas' },
+          { nome: 'Porta-Retratos · Garrafas Squize' },
+        ],
+      },
+      {
+        id: 'comunicacao',
+        titulo: 'Comunicação & Plotagem',
+        itens: [
+          { nome: 'Banner · Faixa · Cavalete' },
+          { nome: 'Adesivos Vinil' },
+          { nome: 'Plotagem' },
+        ],
+      },
     ],
   },
   {
@@ -74,19 +155,36 @@ const portais = [
     nome: 'CidManutenção',
     href: '/cidmanutencao',
     icone: '🔧',
-    cor: 'from-emerald-500 to-teal-600',
-    corBorda: 'border-emerald-500/40',
-    corGlow: 'rgba(16,185,129,0.3)',
-    corTexto: 'text-emerald-300',
+    corTexto: 'text-emerald-400',
+    corBorda: 'border-emerald-500/30',
     corBg: 'bg-emerald-500/10',
-    servicos: [
-      'Manutenção em PCs',
-      'Hardware e Software',
-      'Cópias de Chaves',
-      'Soldagem metálicas',
-      'Móveis em pallet',
-      'Peças em Resinas',
-      'Recuperação de peças fibra de vidro',
+    corGlow: 'rgba(16,185,129,0.25)',
+    categorias: [
+      {
+        id: 'informatica',
+        titulo: 'Informática',
+        itens: [
+          { nome: 'Manutenção em PCs' },
+          { nome: 'Hardware e Software' },
+        ],
+      },
+      {
+        id: 'chaves',
+        titulo: 'Chaves',
+        itens: [
+          { nome: 'Cópias de Chaves' },
+        ],
+      },
+      {
+        id: 'oficina',
+        titulo: 'Oficina & Estruturas',
+        itens: [
+          { nome: 'Soldagem metálicas' },
+          { nome: 'Móveis em pallet' },
+          { nome: 'Peças em Resinas' },
+          { nome: 'Recuperação de peças fibra de vidro' },
+        ],
+      },
     ],
   },
 ];
@@ -100,9 +198,32 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, lang, onChangeLang }) => {
   const { t } = useContext(LangContext);
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
+  const [nome, setNome] = useState('');
+  const [telefone, setTelefone] = useState('');
+
+  const toggleCategory = (catId: string) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
+
+  const handleOrcamentoSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    let texto = 'Olá! Gostaria de um orçamento personalizado.';
+    const extras: string[] = [];
+    if (nome.trim()) extras.push(`Nome: ${nome.trim()}`);
+    if (telefone.trim()) extras.push(`Telefone: ${telefone.trim()}`);
+    if (extras.length > 0) {
+      texto += `\n\n${extras.join('\n')}`;
+    }
+    const url = `https://wa.me/5571993291947?text=${encodeURIComponent(texto)}`;
+    window.open(url, '_blank');
+  };
 
   return (
-    <div className="relative min-h-screen bg-[#080a12] overflow-hidden font-sans">
+    <div className="relative min-h-screen bg-[#080a12] overflow-x-hidden font-sans selection:bg-violet-500/30 selection:text-white">
 
       {/* ===== BACKGROUND BALÕES FLUTUANTES ===== */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -126,6 +247,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
         ))}
       </div>
 
+      {/* ===== ESTRELAS ===== */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
         <div className="galaxy-band" />
         {galaxyStars.map((star, i) => (
@@ -146,7 +268,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
       </div>
 
       {/* ===== BARRA SUPERIOR ===== */}
-      <div className="sticky top-5 z-40 w-full pointer-events-none mb-[-60px]">
+      <div className="w-full pt-4 pb-2 z-40 relative">
         <TopBar
           isDark={isDark}
           onToggleDark={onToggleDark}
@@ -155,192 +277,237 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
         />
       </div>
 
-      {/* ===== CONTEÚDO PRINCIPAL ===== */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-24 pb-16">
+      {/* ===== ÁRVORE HIERÁRQUICA DE SERVIÇOS ===== */}
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-4 pt-8 pb-20 max-w-[1200px] mx-auto">
 
-        {/* Hub central — CidServiços */}
+        {/* NÓ RAIZ — HUB DE SERVIÇOS */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center mb-4"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center relative z-20"
         >
-          {/* Badge topo */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] uppercase tracking-widest text-slate-300 mb-6 backdrop-blur-sm"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-            {t.landingBadge}
-          </motion.div>
+          {/* Badge de código </> */}
+          <div className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/15 flex items-center justify-center text-lg font-mono text-violet-300 shadow-[0_0_20px_rgba(139,92,246,0.2)] backdrop-blur-md mb-2">
+            {'</>'}
+          </div>
 
-          {/* Título CidServiços */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
-            className="relative"
-          >
-            {/* Glow atrás do título */}
-            <div
-              className="absolute inset-0 rounded-full blur-3xl opacity-40"
-              style={{ background: 'radial-gradient(ellipse, rgba(139,92,246,0.6) 0%, transparent 70%)' }}
-            />
-            <h1 className="relative text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-none text-center">
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-300 via-white to-indigo-300">
-                {t.landingTitlePrefix}{" "}
-              </span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-500">
-                {t.landingTitleAccent}
-              </span>
-            </h1>
-          </motion.div>
+          <h1 className="text-3xl md:text-5xl tracking-tight leading-none text-center">
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-200 via-white to-indigo-200">
+              {t.landingTitlePrefix || 'Hub de'}{' '}
+            </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-500">
+              {t.landingTitleAccent || 'Serviços'}
+            </span>
+          </h1>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-yellow-400 text-2xl md:text-3xl font-bold mt-4 text-center max-w-xl"
-          >
-            {t.landingSubtitle}
-          </motion.p>
+          <p className="text-yellow-400 text-base md:text-xl mt-2 font-normal text-center">
+            {t.landingSubtitle || 'Escolha o serviço que você precisa'}
+          </p>
         </motion.div>
 
-        {/* Linha vertical conectora central (do hub para os cards) */}
-        <motion.div
-          initial={{ scaleY: 0, opacity: 0 }}
-          animate={{ scaleY: 1, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.4, ease: 'easeOut' }}
-          style={{ transformOrigin: 'top' }}
-          className="w-px h-10 bg-gradient-to-b from-violet-500/60 to-transparent mb-0"
-        />
+        {/* TRONCO PRINCIPAL: LINHA VERTICAL DESCENDO DA RAIZ */}
+        <div className="w-px h-6 bg-white/30 my-0 relative z-10" />
 
-        {/* Linha horizontal e pontos de ramificação */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5, ease: 'easeOut' }}
-          style={{ transformOrigin: 'center' }}
-          className="service-constellation w-full max-w-4xl px-8 flex items-center justify-between relative"
-        >
-          {/* Linha horizontal */}
-          <div className="absolute left-[12%] right-[12%] top-1/2 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent" />
+        {/* ESTRUTURA DA ÁRVORE (CONEXÕES ORTOGONAIS PRECISAS) */}
+        <div className="w-full relative z-10 max-w-[1060px] mx-auto">
 
-          {/* Estrelas nos extremos + centro */}
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="relative flex items-center justify-center" style={{ width: '33.33%' }}>
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.9 + i * 0.1 }}
-                className="service-star z-10"
-                style={{ animationDelay: `${i * 1.15}s` }}
-              >
-                ✦
-              </motion.div>
+          {/* CONECTORES ORTOGONAIS PARA OS 3 PORTAIS (DESKTOP) */}
+          <div className="hidden lg:grid grid-cols-3 w-full h-6 relative">
+            {/* Ramo Esquerda: Linha de 50% até 100% + Linha vertical descendo em 50% */}
+            <div className="relative w-full h-full">
+              <div className="absolute top-0 right-0 left-1/2 h-px bg-white/30" />
+              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/30" />
             </div>
-          ))}
-        </motion.div>
 
-        {/* Linhas verticais para cada card */}
-        <div className="w-full max-w-4xl px-8 flex justify-between">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="flex justify-center" style={{ width: '33.33%' }}>
-              <motion.div
-                initial={{ scaleY: 0, opacity: 0 }}
-                animate={{ scaleY: 1, opacity: 1 }}
-                transition={{ delay: 1.0 + i * 0.1, duration: 0.3, ease: 'easeOut' }}
-                style={{ transformOrigin: 'top' }}
-                className="w-px h-6 bg-gradient-to-b from-violet-500/60 to-transparent"
-              />
+            {/* Ramo Centro: Linha de 0% até 100% + Linha vertical descendo em 50% */}
+            <div className="relative w-full h-full">
+              <div className="absolute top-0 left-0 right-0 h-px bg-white/30" />
+              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/30" />
             </div>
-          ))}
-        </div>
 
-        {/* ===== CARDS DOS PORTAIS ===== */}
-        <div className="w-full max-w-5xl px-4 grid grid-cols-1 md:grid-cols-3 gap-5">
-          {portais.map((portal, i) => (
-            <MotionLink
-              key={portal.id}
-              to={portal.href}
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.1 + i * 0.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              whileHover={{ scale: 1.03, y: -4 }}
-              whileTap={{ scale: 0.97 }}
-              className={`portal-card relative group rounded-2xl border ${portal.corBorda} bg-white/[0.03] backdrop-blur-md p-6 cursor-pointer overflow-hidden transition-all duration-300`}
-              style={{ textDecoration: 'none' }}
-            >
-              {/* Glow no hover */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: `radial-gradient(ellipse at center, ${portal.corGlow} 0%, transparent 70%)` }}
-              />
+            {/* Ramo Direita: Linha de 0% até 50% + Linha vertical descendo em 50% */}
+            <div className="relative w-full h-full">
+              <div className="absolute top-0 left-0 right-1/2 h-px bg-white/30" />
+              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/30" />
+            </div>
+          </div>
 
-              {/* Topo do card — ícone + nome */}
-              <div className="relative z-10 flex items-center gap-3 mb-5">
-                <motion.div
-                  initial={{ scale: 0, rotate: -15 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 1.3 + i * 0.2, type: 'spring', stiffness: 200 }}
-                  className={`w-12 h-12 rounded-xl ${portal.corBg} flex items-center justify-center text-2xl border ${portal.corBorda} overflow-hidden p-1.5`}
+          {/* GRID DOS 3 PORTAIS E SUAS SUBPASTAS */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-0 w-full pt-0">
+            {treeData.map((portal, portalIndex) => (
+              <div key={portal.id} className="flex flex-col items-center px-2">
+
+                {/* NÓ MESTRE DO PORTAL */}
+                <MotionLink
+                  to={portal.href}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 + portalIndex * 0.15, duration: 0.5 }}
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`inline-flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border ${portal.corBorda} bg-white/[0.03] hover:bg-white/[0.07] backdrop-blur-md shadow-md cursor-pointer group transition-all duration-300 z-20 w-[210px]`}
+                  style={{ textDecoration: 'none' }}
                 >
-                  {portal.icone.startsWith('/') ? (
-                    <img src={portal.icone} className="w-full h-full object-contain" alt={portal.nome} />
-                  ) : portal.icone === '∞' ? (
-                    <span className="text-4xl font-light leading-none text-yellow-300 drop-shadow-[0_0_10px_rgba(251,191,36,0.45)]">
-                      {portal.icone}
+                  <div className="flex items-center gap-2">
+                    <span className="text-base leading-none flex items-center justify-center">
+                      {portal.icone === '∞' ? (
+                        <span className="text-lg font-light leading-none text-yellow-300">∞</span>
+                      ) : (
+                        portal.icone
+                      )}
                     </span>
-                  ) : (
-                    portal.icone
-                  )}
-                </motion.div>
-                <div>
-                  <h2 className={`text-lg leading-tight font-bold ${portal.corTexto}`}>
-                    {t.portalNames[i]}
-                  </h2>
-                  <div className={`h-0.5 mt-1 rounded-full bg-gradient-to-r ${portal.cor} opacity-60`} style={{ width: '60%' }} />
+                    <span className={`text-xs font-normal tracking-tight ${portal.corTexto}`}>
+                      {t.portalNames?.[portalIndex] || portal.nome}
+                    </span>
+                  </div>
+
+                  <span className={`material-icons-outlined text-sm ${portal.corTexto} opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all`}>
+                    arrow_forward
+                  </span>
+                </MotionLink>
+
+                {/* LINHA VERTICAL SAINDO DO CENTRO DO CARD MESTRE */}
+                <div className="w-px h-5 bg-white/20 my-0 relative z-10" />
+
+                {/* CONECTORES ORTOGONAIS DAS SUBPASTAS (DESKTOP/TABLET) */}
+                <div className="w-full relative">
+                  <div className="hidden sm:grid grid-cols-3 w-full h-4 relative">
+                    {/* Subpasta 0 (Esquerda) */}
+                    <div className="relative w-full h-full">
+                      <div className="absolute top-0 right-0 left-1/2 h-px bg-white/20" />
+                      <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20" />
+                    </div>
+
+                    {/* Subpasta 1 (Centro) */}
+                    <div className="relative w-full h-full">
+                      <div className="absolute top-0 left-0 right-0 h-px bg-white/20" />
+                      <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20" />
+                    </div>
+
+                    {/* Subpasta 2 (Direita) */}
+                    <div className="relative w-full h-full">
+                      <div className="absolute top-0 left-0 right-1/2 h-px bg-white/20" />
+                      <div className="absolute top-0 bottom-0 left-1/2 w-px bg-white/20" />
+                    </div>
+                  </div>
+
+                  {/* GRID DAS 3 SUBPASTAS */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 w-full">
+                    {portal.categorias.map((cat) => {
+                      const isOpen = !!openCategories[cat.id];
+
+                      return (
+                        <div key={cat.id} className="flex flex-col items-center text-center">
+
+                          {/* BOTÃO DA SUBPASTA (CENTRALIZADO COM A LINHA VERTICAL) */}
+                          <button
+                            type="button"
+                            onClick={() => toggleCategory(cat.id)}
+                            className={`flex flex-col items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-white/[0.04] active:scale-95 group cursor-pointer w-full ${
+                              isOpen ? portal.corTexto : 'text-slate-300 hover:text-white'
+                            }`}
+                            title={isOpen ? 'Clique para fechar pasta' : 'Clique para abrir pasta'}
+                          >
+                            <span className="flex-shrink-0 transition-transform mb-1">
+                              {isOpen ? (
+                                <FolderOpenIcon className="w-4 h-4" />
+                              ) : (
+                                <FolderClosedIcon className="w-4 h-4" />
+                              )}
+                            </span>
+
+                            <span className="text-[11px] font-normal tracking-tight leading-tight select-none text-center">
+                              {cat.titulo}
+                            </span>
+                          </button>
+
+                          {/* LISTA DE SERVIÇOS (SÓ EXIBE APÓS CLICAR) */}
+                          <AnimatePresence>
+                            {isOpen && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="w-full flex flex-col items-start pl-2 py-1 mt-1 space-y-1 overflow-hidden"
+                              >
+                                {cat.itens.map((item, itemIndex) => (
+                                  <div
+                                    key={itemIndex}
+                                    className="flex items-center gap-1.5 py-0.5 text-left transition-colors duration-150"
+                                  >
+                                    <span className={`w-1 h-1 rounded-full ${portal.corBg} border ${portal.corBorda} flex-shrink-0`} />
+                                    <span className="text-[10px] text-slate-300 font-normal leading-tight hover:text-white">
+                                      {item.nome}
+                                    </span>
+                                  </div>
+                                ))}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
+
               </div>
+            ))}
+          </div>
 
-              {/* Lista de serviços */}
-              <ul className="relative z-10 space-y-2">
-                {t.portalServices[i].map((servico, si) => (
-                  <motion.li
-                    key={si}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1.5 + i * 0.2 + si * 0.06 }}
-                    className="flex items-start gap-2 text-slate-400 text-xs leading-snug"
-                  >
-                    <span className={`mt-0.5 w-1 h-1 rounded-full flex-shrink-0 bg-gradient-to-br ${portal.cor}`} />
-                    {servico}
-                  </motion.li>
-                ))}
-              </ul>
-
-              {/* Botão de acesso */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.8 + i * 0.2 }}
-                className={`relative z-10 mt-6 flex items-center gap-2 ${portal.corTexto} text-xs group-hover:gap-3 transition-all`}
-              >
-                <span>{t.accessLabel} {t.portalNames[i]}</span>
-                <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </motion.div>
-            </MotionLink>
-          ))}
         </div>
 
-        {/* Rodapé da Landing */}
+        {/* SEÇÃO SOLICITE UM ORÇAMENTO */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="mt-24 sm:mt-28 w-full max-w-lg mx-auto flex flex-col items-center text-center relative z-20 px-2"
+        >
+          <div className="inline-flex items-center gap-2 mb-3.5">
+            <span className="w-2 h-2 rounded-full bg-lime-400 shadow-[0_0_8px_#a3e635] animate-pulse" />
+            <h3 className="text-xs uppercase tracking-widest text-yellow-400 font-normal">
+              Solicite um orçamento
+            </h3>
+          </div>
+
+          <form
+            onSubmit={handleOrcamentoSubmit}
+            className="w-full flex flex-col sm:flex-row items-center gap-2 p-1.5 rounded-xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-lg"
+          >
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Seu nome"
+              className="w-full sm:flex-1 px-3 py-2 text-xs bg-transparent border-0 text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50 rounded-lg"
+            />
+            <div className="hidden sm:block w-px h-5 bg-white/10" />
+            <input
+              type="tel"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+              placeholder="Telefone / WhatsApp"
+              className="w-full sm:flex-1 px-3 py-2 text-xs bg-transparent border-0 text-white placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-violet-500/50 rounded-lg"
+            />
+            <button
+              type="submit"
+              className="w-full sm:w-auto px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white rounded-lg transition-all flex items-center justify-center gap-1 text-xs active:scale-95 shadow-md group cursor-pointer"
+              title="Enviar solicitação via WhatsApp"
+            >
+              <span>Enviar</span>
+              <span className="material-icons-outlined text-sm group-hover:translate-x-0.5 transition-transform">
+                arrow_forward
+              </span>
+            </button>
+          </form>
+        </motion.div>
+
       </div>
 
-      {/* Botão WhatsApp */}
+      {/* Botão WhatsApp Flutuante */}
       <a
         href="https://wa.me/5571984184782"
         target="_blank"

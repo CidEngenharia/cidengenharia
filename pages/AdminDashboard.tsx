@@ -129,6 +129,14 @@ export const AdminDashboard: React.FC = () => {
       path: '/admin/prompt-analyzer',
       color: 'from-emerald-500 to-teal-600',
       tag: 'VISION AI'
+    },
+    {
+      title: 'Virtual Engineer AI',
+      desc: 'Extensão digital e chat interativo com a inteligência do Studio CidEngenharia 360°.',
+      icon: 'psychology',
+      path: '/admin/virtual-engineer',
+      color: 'from-emerald-500 via-teal-500 to-emerald-600',
+      tag: 'ASSISTENTE IA'
     }
   ];
 

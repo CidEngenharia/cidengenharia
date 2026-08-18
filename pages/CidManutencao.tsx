@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-
 
 const bgBubbles = [
   { size: 'w-[45%] h-[45%]', pos: 'top-[-15%] right-[-10%]', color: 'rgba(16,185,129,0.35)', delay: 0, duration: 8 },
@@ -11,22 +10,67 @@ const bgBubbles = [
   { size: 'w-[20%] h-[20%]', pos: 'top-[50%] right-[20%]', color: 'rgba(6,182,212,0.2)', delay: 5, duration: 18 },
 ];
 
-const categorias = [
+interface ServiceDetail {
+  id: string;
+  title: string;
+  icon: string;
+  imageUrl?: string;
+  desc: string;
+  features: string[];
+  fullDesc: string;
+  color: string;
+}
+
+interface Categoria {
+  titulo: string;
+  icone: string;
+  servicos: ServiceDetail[];
+}
+
+const categorias: Categoria[] = [
   {
     titulo: 'Manutenção de Computadores',
     icone: '💻',
     servicos: [
       {
-        nome: 'Manutenção em PCs',
-        desc: 'Diagnóstico completo, limpeza, formatação e otimização de desktops e notebooks',
+        id: 'manutencao-pcs',
+        title: 'Manutenção em PCs',
+        icon: 'computer',
+        imageUrl: '/cidmanutencao-pcs.png',
+        desc: 'Diagnóstico completo, limpeza, formatação e otimização de desktops e notebooks.',
+        features: ['Diagnóstico completo', 'Limpeza interna', 'Formatação e backup', 'Otimização de desempenho'],
+        fullDesc: 'Diagnóstico completo, limpeza interna, formatação e otimização de desktops e notebooks. Mantemos seu equipamento funcionando com rapidez e confiabilidade.',
+        color: 'bg-emerald-600',
       },
       {
-        nome: 'Hardware',
-        desc: 'Troca de peças, upgrade de memória, SSD, placa de vídeo e fontes de alimentação',
+        id: 'hardware',
+        title: 'Hardware',
+        icon: 'memory',
+        imageUrl: '/cidmanutencao-hardware.png',
+        desc: 'Troca de peças, upgrade de memória, SSD, placa de vídeo e fontes de alimentação.',
+        features: ['Upgrade de memória RAM', 'Instalação de SSD', 'Troca de placa de vídeo', 'Substituição de fontes'],
+        fullDesc: 'Troca de peças, upgrade de memória, SSD, placa de vídeo e fontes de alimentação. Orçamento transparente com peças de qualidade e garantia nos serviços.',
+        color: 'bg-emerald-600',
       },
       {
-        nome: 'Software',
-        desc: 'Instalação de sistemas operacionais, drivers, programas e remoção de vírus e malwares',
+        id: 'software',
+        title: 'Software',
+        icon: 'settings',
+        imageUrl: '/cidmanutencao-software.png',
+        desc: 'Instalação de sistemas operacionais, drivers, programas e remoção de vírus e malwares.',
+        features: ['Instalação de PC e Notebooks com Windows 07/10/11', 'Atualização de drivers', 'Remoção de vírus', 'Configuração de programas'],
+        fullDesc: 'Instalação de sistemas operacionais, drivers, programas e remoção de vírus e malwares. Seu computador seguro e pronto para uso no menor tempo possível.',
+        color: 'bg-emerald-600',
+      },
+      {
+        id: 'manutencao-eletronicos',
+        title: 'Manutenção em Eletrônicos',
+        icon: 'electrical_services',
+        imageUrl: '/cidmanutencao-eletronicos.png',
+        desc: 'Manutenção em placas eletrônicas e periféricos, substituição de componentes e diagnósticos.',
+        features: ['Manutenção em placas eletrônicas', 'Manutenção em periféricos', 'Substituição de componentes', 'Diagnósticos técnicos'],
+        fullDesc: 'Manutenção em placas eletrônicas e periféricos, substituição de componentes e diagnósticos completos. Serviço técnico especializado para garantir o pleno funcionamento dos seus equipamentos eletrônicos.',
+        color: 'bg-emerald-600',
       },
     ],
   },
@@ -35,38 +79,144 @@ const categorias = [
     icone: '🔑',
     servicos: [
       {
-        nome: 'Chaves Comuns (Cópias)',
-        desc: 'Reprodução de chaves residenciais, comerciais e de veículos com precisão e rapidez',
+        id: 'chaves-comuns',
+        title: 'Chaves Comuns',
+        icon: 'key',
+        imageUrl: '/cidmanutencao-chaves-comuns.png',
+        desc: 'Reprodução de chaves residenciais, comerciais e de veículos com precisão e rapidez.',
+        features: ['Chaves residenciais', 'Chaves comerciais', 'Chaves de veículos', 'Atendimento rápido'],
+        fullDesc: 'Reprodução de chaves residenciais, comerciais e de veículos com precisão e rapidez. Serviço ágil para quando você mais precisa.',
+        color: 'bg-teal-600',
       },
       {
-        nome: 'Chaves Especiais',
-        desc: 'Chaves codificadas e de segurança — consulte disponibilidade para seu modelo',
+        id: 'chaves-especiais',
+        title: 'Chaves Especiais',
+        icon: 'vpn_key',
+        imageUrl: '/cidmanutencao-chaves-especiais.png',
+        desc: 'Chaves codificadas e de segurança — consulte disponibilidade para seu modelo.',
+        features: ['Chaves codificadas', 'Chaves de segurança', 'Consulta por modelo', 'Alta precisão'],
+        fullDesc: 'Chaves codificadas e de segurança — consulte disponibilidade para seu modelo. Atendimento especializado para chaves que exigem maior cuidado técnico.',
+        color: 'bg-teal-600',
       },
     ],
   },
   {
-    titulo: 'Serviços para Imóveis',
-    icone: '🏠',
+    titulo: 'Oficina & Reparos',
+    icone: '🔧',
     servicos: [
       {
-        nome: 'Imóveis em Pallete',
-        desc: 'Projetos e execução de móveis, estruturas e decoração utilizando paletes de madeira',
+        id: 'soldagem',
+        title: 'Soldagem Metálicas',
+        icon: 'construction',
+        imageUrl: '/cidmanutencao-soldagem.png',
+        desc: 'Soldagem e reparos em estruturas metálicas, grades, portões e peças diversas.',
+        features: ['Soldagem MIG/MA', 'Reparo de grades', 'Peças sob medida', 'Acabamento profissional'],
+        fullDesc: 'Soldagem e reparos em estruturas metálicas, grades, portões e peças diversas. Soluções duráveis com acabamento de qualidade.',
+        color: 'bg-emerald-600',
       },
       {
-        nome: 'Serviços Gerais',
-        desc: 'Pequenos reparos, instalações e manutenção preventiva para residências e escritórios',
+        id: 'moveis-pallet',
+        title: 'Móveis em Pallet',
+        icon: 'weekend',
+        imageUrl: '/cidmanutencao-moveis-pallet.png',
+        desc: 'Projetos e execução de móveis, estruturas e decoração utilizando paletes de madeira.',
+        features: ['Projetos personalizados', 'Móveis rústicos', 'Decoração criativa', 'Execução completa'],
+        fullDesc: 'Projetos e execução de móveis, estruturas e decoração utilizando paletes de madeira. Peças únicas com visual moderno e sustentável.',
+        color: 'bg-emerald-600',
+      },
+      {
+        id: 'pecas-resinas',
+        title: 'Peças em Resinas',
+        icon: 'category',
+        imageUrl: '/cidmanutencao-pecas-resinas.png',
+        desc: 'Fabricação de peças em resina para acabamentos, decoração e uso funcional.',
+        features: ['Moldes personalizados', 'Alta durabilidade', 'Acabamento refinado', 'Peças sob medida'],
+        fullDesc: 'Fabricação de peças em resina para acabamentos, decoração e uso funcional. Produção com precisão e acabamento de alto padrão.',
+        color: 'bg-emerald-600',
+      },
+      {
+        id: 'fibra-vidro',
+        title: 'Recuperação Fibra de Vidro',
+        icon: 'handyman',
+        imageUrl: '/cidmanutencao-fibra-vidro.png',
+        desc: 'Recuperação e reparo de peças em fibra de vidro danificadas ou desgastadas.',
+        features: ['Reparo estrutural', 'Laminagem', 'Acabamento liso', 'Restauração completa'],
+        fullDesc: 'Recuperação e reparo de peças em fibra de vidro danificadas ou desgastadas. Restauramos a integridade e aparência original das peças.',
+        color: 'bg-emerald-600',
       },
     ],
   },
 ];
 
+const ServiceCard: React.FC<{
+  service: ServiceDetail;
+  isActive: boolean;
+  onSelect: () => void;
+}> = ({ service, isActive, onSelect }) => {
+  return (
+    <div
+      onClick={onSelect}
+      className={`relative grid grid-cols-1 md:grid-cols-[0.92fr_1.08fr] overflow-hidden min-h-[260px] rounded-[1.6rem] transition-all duration-500 hover:shadow-2xl h-full cursor-pointer group bg-[#f8f0dc] border ${
+        isActive ? 'border-orange-500 ring-2 ring-orange-500/25 z-10 shadow-xl shadow-orange-500/10' : 'border-white/80 hover:border-orange-300'
+      }`}
+    >
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at top left, rgba(249,115,22,0.14) 0%, transparent 65%)' }}
+      />
+
+      <div className="relative min-h-[170px] p-4 md:min-h-full flex flex-col justify-center bg-[#fff7e7]">
+        <div className="relative mx-auto my-0 h-36 w-40 md:h-40 md:w-44">
+          {service.imageUrl ? (
+            <>
+              <div className="absolute inset-2 rotate-[-4deg] rounded-[1.2rem] border-2 border-orange-500/80"></div>
+              <img
+                src={service.imageUrl}
+                alt={service.title}
+                className="relative h-full w-full rounded-[1.4rem] object-cover shadow-xl shadow-orange-900/15"
+              />
+            </>
+          ) : (
+            <>
+              <div className="absolute inset-2 rotate-[-4deg] rounded-[1.2rem] border-2 border-orange-500/80"></div>
+              <div className="absolute inset-4 rotate-[-8deg] rounded-[1.2rem] border-2 border-orange-500/80"></div>
+              <div className="absolute inset-0 rounded-[2rem] bg-white/80 shadow-xl shadow-orange-900/10"></div>
+              <div className={`absolute inset-6 ${service.color} rounded-[1.4rem] opacity-95 shadow-lg shadow-orange-900/20`}></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="material-icons-outlined text-[4.2rem] text-white drop-shadow-md">{service.icon}</span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="relative z-10 flex flex-col p-5 md:p-6">
+        <div className="flex-1">
+          <h3 className="text-xl font-black text-slate-900 leading-tight group-hover:text-orange-600 transition-colors">{service.title}</h3>
+          <p className="mt-3 text-xs font-medium text-slate-600 leading-relaxed">{service.desc}</p>
+
+          <ul className="mt-4 gap-2 grid grid-cols-1">
+            {service.features.slice(0, 3).map((feature, i) => (
+              <li key={i} className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="material-icons-outlined text-[#10b981] text-lg mt-[-2px]">check</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const CidManutencao: React.FC = () => {
   const navigate = useNavigate();
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
+  const [activeServiceId, setActiveServiceId] = useState<string | null>(categorias[0]?.servicos[0]?.id || null);
 
   return (
     <div className="relative min-h-screen bg-[#080a12] overflow-hidden font-sans">
 
-      {/* BACKGROUND BALÕES */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {bgBubbles.map((bubble, i) => (
           <motion.div
@@ -88,10 +238,8 @@ export const CidManutencao: React.FC = () => {
         ))}
       </div>
 
-      {/* CONTEÚDO */}
       <div className="relative z-10 max-w-6xl mx-auto px-6 md:px-12 py-8 pt-10">
 
-        {/* Botão voltar */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -108,7 +256,6 @@ export const CidManutencao: React.FC = () => {
           </button>
         </motion.div>
 
-        {/* HERO */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -144,51 +291,54 @@ export const CidManutencao: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* CARDS DE CATEGORIAS */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {categorias.map((cat, ci) => (
-            <motion.div
-              key={ci}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 + ci * 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="relative group rounded-2xl border border-emerald-500/20 bg-white/[0.03] backdrop-blur-md p-6 overflow-hidden hover:border-emerald-500/40 transition-all duration-300"
+        <div className="flex flex-wrap gap-2 mb-10 justify-center md:justify-start">
+          {categorias.map((cat, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setActiveCategoryIndex(index);
+                if (cat.servicos.length > 0) {
+                  setActiveServiceId(cat.servicos[0].id);
+                }
+              }}
+              className={`flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 border ${
+                activeCategoryIndex === index
+                  ? 'bg-emerald-600 border-emerald-600 text-white shadow-lg shadow-emerald-600/30'
+                  : 'bg-white/[0.03] border-emerald-500/10 text-slate-400 hover:border-emerald-500/30 hover:text-slate-200'
+              }`}
             >
-              {/* Glow hover */}
-              <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: 'radial-gradient(ellipse at top left, rgba(16,185,129,0.15) 0%, transparent 70%)' }}
+              <span>{cat.icone}</span>
+              <span>{cat.titulo}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="mb-6 flex flex-col gap-2 text-center md:text-left">
+          <span className="text-[10px] font-black uppercase tracking-[0.22em] text-orange-400">
+            {categorias[activeCategoryIndex].icone} Aba {activeCategoryIndex + 1}
+          </span>
+          <h2 className="text-2xl md:text-3xl font-black text-white">
+            {categorias[activeCategoryIndex].titulo}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          {categorias[activeCategoryIndex].servicos.map((s, si) => (
+            <motion.div
+              key={s.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + si * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <ServiceCard
+                service={s}
+                isActive={activeServiceId === s.id}
+                onSelect={() => setActiveServiceId(s.id)}
               />
-
-              {/* Cabeçalho da categoria */}
-              <div className="flex items-center gap-3 mb-5">
-                <span className="text-2xl">{cat.icone}</span>
-                <h2 className="text-emerald-300 text-sm tracking-wide">{cat.titulo}</h2>
-              </div>
-
-              {/* Lista de serviços */}
-              <div className="space-y-4">
-                {cat.servicos.map((s, si) => (
-                  <motion.div
-                    key={si}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.6 + ci * 0.15 + si * 0.08 }}
-                    className="flex items-start gap-3"
-                  >
-                    <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex-shrink-0" />
-                    <div>
-                      <p className="text-slate-200 text-sm leading-snug">{s.nome}</p>
-                      <p className="text-slate-500 text-xs mt-0.5 leading-relaxed">{s.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
             </motion.div>
           ))}
         </div>
 
-        {/* DESTAQUE — Por que escolher a CidManutenção */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -213,7 +363,6 @@ export const CidManutencao: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* CTA CONTATO */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -234,7 +383,6 @@ export const CidManutencao: React.FC = () => {
           </a>
         </motion.div>
 
-        {/* Rodapé */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

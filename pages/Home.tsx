@@ -161,7 +161,16 @@ const DraftForm = () => {
   const [inputError, setInputError] = useState('');
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const flow = [
+  interface FlowItem {
+    key: string;
+    question: string;
+    validate?: (val: string) => boolean | string;
+    options?: string[];
+    condition?: (answers: any) => boolean;
+    isFinal?: boolean;
+  }
+
+  const flow: FlowItem[] = [
     { key: "nome", question: "Qual seu nome?" },
     { 
       key: "whatsapp", 
@@ -290,7 +299,7 @@ const DraftForm = () => {
     }, 1500);
   };
 
-  const currentFlowItem = flow[step] || {};
+  const currentFlowItem = flow[step] || { key: '', question: '' };
   const isFinalStep = currentFlowItem.isFinal;
 
   return (
@@ -562,11 +571,11 @@ export const Home: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="flex flex-col xl:flex-row items-start xl:items-baseline gap-x-2 mb-4 text-left w-full"
         >
-          <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-5xl font-black tracking-tighter leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
+          <h2 className="text-xl sm:text-2xl md:text-3xl tracking-tight leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#7c3aed] via-[#a78bfa] to-[#6366f1] pb-1">
             {t.brand}
           </h2>
-          <div className="text-4xl sm:text-6xl md:text-7xl lg:text-5xl font-normal tracking-tighter leading-none mt-2 xl:mt-0">
-             <TypewriterText text=" e ai! vamos codar?" delay={1} />
+          <div className="text-xl sm:text-2xl md:text-3xl font-normal tracking-tight leading-none mt-2 xl:mt-0 text-slate-300">
+             <TypewriterText text=" O que vamos desenvolver hoje?" delay={1} />
           </div>
         </motion.div>
 

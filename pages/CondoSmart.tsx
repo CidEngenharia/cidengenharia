@@ -230,7 +230,7 @@ export const CondoSmart: React.FC = () => {
     <div className="min-h-screen bg-slate-100 dark:bg-[#020617] flex flex-col">
       <header className="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between z-50 sticky top-0 shadow-sm">
         <div className="flex items-center gap-4">
-          <Link to="/shop" className="text-slate-400 hover:text-primary-500 transition-colors">
+          <Link to="/" className="text-slate-400 hover:text-primary-500 transition-colors">
             <span className="material-icons-outlined">arrow_back</span>
           </Link>
           <div className="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>

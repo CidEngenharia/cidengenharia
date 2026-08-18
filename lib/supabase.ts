@@ -1,4 +1,5 @@
 
+// @ts-ignore
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@^2.39.7';
 
 // Credenciais integradas conforme solicitado

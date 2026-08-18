@@ -85,9 +85,9 @@ export const TopBar: React.FC<TopBarProps> = ({ isDark, onToggleDark, lang, onCh
             <div className="relative">
               <div className="absolute -inset-2 bg-gradient-to-r from-violet-600/10 to-indigo-600/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <img
-                src="/infinito_.jpeg"
-                className="h-16 w-16 object-contain rounded-2xl relative translate-y-1 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6"
-                alt="Hub de Serviços Logo"
+                src="/infinito-logo.png"
+                className="h-12 w-12 object-contain relative transition-transform duration-500 group-hover:scale-110"
+                alt="CidEngenharia Logo"
               />
             </div>
             <div className="flex items-center">
