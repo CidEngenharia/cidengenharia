@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { LangContext } from '../lib/LangContext';
@@ -203,6 +203,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
 
+  const fullTitle = `${t.landingTitlePrefix || 'Hub de'} ${t.landingTitleAccent || 'Serviços'}`.trim();
+  const [displayedText, setDisplayedText] = useState('');
+
+  useEffect(() => {
+    setDisplayedText('');
+    let currentIndex = 0;
+    const startTimer = setTimeout(() => {
+      const interval = setInterval(() => {
+        if (currentIndex <= fullTitle.length) {
+          setDisplayedText(fullTitle.slice(0, currentIndex));
+          currentIndex++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 90);
+
+      return () => clearInterval(interval);
+    }, 400);
+
+    return () => clearTimeout(startTimer);
+  }, [fullTitle]);
+
   const toggleCategory = (catId: string) => {
     setOpenCategories((prev) => ({
       ...prev,
@@ -219,7 +241,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
     if (extras.length > 0) {
       texto += `\n\n${extras.join('\n')}`;
     }
-    const url = `https://wa.me/5571993291947?text=${encodeURIComponent(texto)}`;
+    const url = `https://wa.me/5571999537220?text=${encodeURIComponent(texto)}`;
     window.open(url, '_blank');
   };
 
@@ -293,16 +315,56 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
             {'</>'}
           </div>
 
-          <h1 className="text-3xl md:text-5xl tracking-tight leading-none text-center">
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-200 via-white to-indigo-200">
-              {t.landingTitlePrefix || 'Hub de'}{' '}
-            </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-br from-violet-400 to-purple-500">
-              {t.landingTitleAccent || 'Serviços'}
-            </span>
-          </h1>
+          {/* Container do Título com Efeito de Estrela Luminosa Cósmica */}
+          <div className="relative inline-flex items-center justify-center min-h-[3.8rem] px-6 my-1">
+            {/* EFEITO ESTRELA LUMINOSA / LENS FLARE SUAVE E NATURAL */}
+            <motion.div
+              animate={{
+                scale: [0.95, 1.05, 0.95],
+                opacity: [0.75, 0.95, 0.75],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10 flex items-center justify-center"
+            >
+              {/* Halo difuso cósmico suave */}
+              <div className="absolute w-64 h-64 md:w-80 md:h-80 rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.18)_0%,rgba(168,85,247,0.2)_35%,rgba(99,102,241,0.08)_65%,transparent_75%)] blur-2xl pointer-events-none" />
 
-          <p className="text-yellow-400 text-base md:text-xl mt-2 font-normal text-center">
+              {/* Linhas de reflexo discretas e quase transparentes */}
+              <div className="absolute w-56 md:w-80 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+              <div className="absolute h-20 md:h-32 w-[1px] bg-gradient-to-b from-transparent via-white/30 to-transparent pointer-events-none" />
+              <div className="absolute w-36 md:w-52 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent rotate-45 pointer-events-none" />
+              <div className="absolute w-36 md:w-52 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent -rotate-45 pointer-events-none" />
+
+              {/* Estrela central orgânica desfocada (sem aresta de círculo branco) */}
+              <div className="relative flex items-center justify-center">
+                {/* Brilho e pontas orgânicas da estrela */}
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-[radial-gradient(circle,rgba(255,255,255,0.95)_0%,rgba(253,224,71,0.7)_30%,rgba(168,85,247,0.4)_60%,transparent_80%)] blur-[2px] rounded-full" />
+                <div className="absolute w-10 md:w-14 h-1 md:h-1.5 bg-gradient-to-r from-transparent via-white/90 to-transparent blur-[1px]" />
+                <div className="absolute h-10 md:h-14 w-1 md:w-1.5 bg-gradient-to-b from-transparent via-white/90 to-transparent blur-[1px]" />
+              </div>
+            </motion.div>
+
+            {/* Título com Amarelo Dourado, Fonte Reduzida e Efeito Typewriter */}
+            <h1
+              className="relative z-10 text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-black tracking-tight leading-none text-center select-none"
+              style={{ fontFamily: '"Arial Black", Gadget, sans-serif' }}
+            >
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-yellow-400 to-amber-500 drop-shadow-[0_2px_12px_rgba(234,179,8,0.4)]">
+                {displayedText}
+              </span>
+              <motion.span
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 0.75, repeat: Infinity, ease: 'linear' }}
+                className="inline-block ml-1 w-[2px] h-6 sm:h-7 md:h-8 bg-yellow-400 align-middle shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+              />
+            </h1>
+          </div>
+
+          <p className="text-white text-sm sm:text-base md:text-lg mt-2 font-normal text-center opacity-95">
             {t.landingSubtitle || 'Escolha o serviço que você precisa'}
           </p>
         </motion.div>
