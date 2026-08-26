@@ -199,6 +199,7 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, lang, onChangeLang }) => {
   const { t } = useContext(LangContext);
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({});
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
 
@@ -344,25 +345,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.2 + portalIndex * 0.15, duration: 0.5 }}
-                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileHover={{ scale: 1.04, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`inline-flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg border ${portal.corBorda} bg-white/[0.03] hover:bg-white/[0.07] backdrop-blur-md shadow-md cursor-pointer group transition-all duration-300 z-20 w-[210px]`}
+                  className={`inline-flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border ${portal.corBorda} bg-white/[0.04] hover:bg-white/[0.08] backdrop-blur-md shadow-lg cursor-pointer group transition-all duration-300 z-20 w-[240px]`}
                   style={{ textDecoration: 'none' }}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-base leading-none flex items-center justify-center">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-lg leading-none flex items-center justify-center">
                       {portal.icone === '∞' ? (
-                        <span className="text-lg font-light leading-none text-yellow-300">∞</span>
+                        <span className="text-xl font-light leading-none text-yellow-300">∞</span>
                       ) : (
                         portal.icone
                       )}
                     </span>
-                    <span className={`text-xs font-normal tracking-tight ${portal.corTexto}`}>
+                    <span className={`text-sm font-bold tracking-tight ${portal.corTexto}`}>
                       {t.portalNames?.[portalIndex] || portal.nome}
                     </span>
                   </div>
 
-                  <span className={`material-icons-outlined text-sm ${portal.corTexto} opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all`}>
+                  <span className={`material-icons-outlined text-base ${portal.corTexto} opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all`}>
                     arrow_forward
                   </span>
                 </MotionLink>
@@ -395,53 +396,67 @@ export const LandingPage: React.FC<LandingPageProps> = ({ isDark, onToggleDark, 
                   {/* GRID DAS 3 SUBPASTAS */}
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-1 w-full">
                     {portal.categorias.map((cat) => {
-                      const isOpen = !!openCategories[cat.id];
+                      const isOpen = hoveredCategory === cat.id || !!openCategories[cat.id];
 
                       return (
-                        <div key={cat.id} className="flex flex-col items-center text-center">
+                        <div
+                          key={cat.id}
+                          onMouseEnter={() => setHoveredCategory(cat.id)}
+                          onMouseLeave={() => setHoveredCategory(null)}
+                          className="flex flex-col items-center text-center relative group"
+                        >
 
                           {/* BOTÃO DA SUBPASTA (CENTRALIZADO COM A LINHA VERTICAL) */}
                           <button
                             type="button"
                             onClick={() => toggleCategory(cat.id)}
-                            className={`flex flex-col items-center justify-center p-1 rounded-md transition-all duration-200 hover:bg-white/[0.04] active:scale-95 group cursor-pointer w-full ${
+                            className={`flex flex-col items-center justify-center p-1.5 rounded-lg transition-all duration-200 hover:bg-white/[0.05] active:scale-95 cursor-pointer w-full ${
                               isOpen ? portal.corTexto : 'text-slate-300 hover:text-white'
                             }`}
-                            title={isOpen ? 'Clique para fechar pasta' : 'Clique para abrir pasta'}
+                            title={isOpen ? 'Pasta aberta' : 'Passe o mouse para abrir pasta'}
                           >
-                            <span className="flex-shrink-0 transition-transform mb-1">
+                            <motion.span
+                              className="flex-shrink-0 mb-1"
+                              animate={isOpen ? { scale: 1.15, y: -2 } : { scale: 1, y: 0 }}
+                              transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+                            >
                               {isOpen ? (
-                                <FolderOpenIcon className="w-4 h-4" />
+                                <FolderOpenIcon className="w-5 h-5 drop-shadow-[0_2px_8px_rgba(251,191,36,0.45)]" />
                               ) : (
-                                <FolderClosedIcon className="w-4 h-4" />
+                                <FolderClosedIcon className="w-5 h-5 transition-transform" />
                               )}
-                            </span>
+                            </motion.span>
 
-                            <span className="text-[11px] font-normal tracking-tight leading-tight select-none text-center">
+                            <span className={`text-[11px] font-medium tracking-tight leading-tight select-none text-center transition-colors ${
+                              isOpen ? 'text-white' : 'text-slate-300 group-hover:text-white'
+                            }`}>
                               {cat.titulo}
                             </span>
                           </button>
 
-                          {/* LISTA DE SERVIÇOS (SÓ EXIBE APÓS CLICAR) */}
+                          {/* LISTA DE SERVIÇOS (ABRE NO HOVER OU AO CLICAR) */}
                           <AnimatePresence>
                             {isOpen && (
                               <motion.div
-                                initial={{ opacity: 0, height: 0 }}
-                                animate={{ opacity: 1, height: 'auto' }}
-                                exit={{ opacity: 0, height: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="w-full flex flex-col items-start pl-2 py-1 mt-1 space-y-1 overflow-hidden"
+                                initial={{ opacity: 0, height: 0, y: -4 }}
+                                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                                exit={{ opacity: 0, height: 0, y: -4 }}
+                                transition={{ duration: 0.22, ease: 'easeOut' }}
+                                className="w-full flex flex-col items-start pl-2 py-1.5 mt-1 space-y-1 overflow-hidden"
                               >
                                 {cat.itens.map((item, itemIndex) => (
-                                  <div
+                                  <motion.div
                                     key={itemIndex}
-                                    className="flex items-center gap-1.5 py-0.5 text-left transition-colors duration-150"
+                                    initial={{ opacity: 0, x: -6 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: itemIndex * 0.03, duration: 0.15 }}
+                                    className="flex items-center gap-1.5 py-0.5 text-left transition-colors duration-150 group/item"
                                   >
-                                    <span className={`w-1 h-1 rounded-full ${portal.corBg} border ${portal.corBorda} flex-shrink-0`} />
-                                    <span className="text-[10px] text-slate-300 font-normal leading-tight hover:text-white">
+                                    <span className={`w-1.5 h-1.5 rounded-full ${portal.corBg} border ${portal.corBorda} flex-shrink-0 group-hover/item:scale-125 transition-transform`} />
+                                    <span className="text-[10px] text-slate-300 font-normal leading-tight hover:text-white transition-colors">
                                       {item.nome}
                                     </span>
-                                  </div>
+                                  </motion.div>
                                 ))}
                               </motion.div>
                             )}
